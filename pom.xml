@@ -13,6 +13,7 @@
 		<commons-io.version>2.6</commons-io.version>
 		<commons-lang3.version>3.7</commons-lang3.version>
 		<maven-model.version>3.5.2</maven-model.version>
+		<log4j-core>2.9.1</log4j-core>
 		<junit.version>4.12</junit.version>
 		<jdk.version>1.8</jdk.version>
 	</properties>
@@ -52,6 +53,12 @@
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-model</artifactId>
 			<version>${maven-model.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
+		    <version>${log4j-core}</version>
 		</dependency>
 
 		<dependency>

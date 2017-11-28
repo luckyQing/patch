@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<!-- 变量配置 -->
+	<Properties>
+		<Property name="log_path">E:/logs/patch</Property>
+		<!-- 
+			%level 输出优先级，即DEBUG，INFO，WARN，ERROR，FATAL 
+			%m 输出代码中指定的消息 
+			%n 输出一个回车换行符，Windows平台为“/r/n”，Unix平台为“/n” 
+			%thread 输出产生该日志事件的线程名
+			%line 代码调用位置 
+			%method 执行的方法 
+			-->
+		<Property name="log_format">[%-5level][%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread] (%F:%line)[%method] -> %message%n</Property>
+	</Properties>
+
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="${log_format}" />
+		</Console>
+		<RollingFile name="DailyRollingFile" fileName="${log_path}/patch.log"
+			filePattern="${log_path}/patch%d{yyyy-MM-dd}.log">
+			<PatternLayout pattern="${log_format}" />
+			<TimeBasedTriggeringPolicy interval="1" />
+			<SizeBasedTriggeringPolicy size="10 MB" />
+		</RollingFile>
+	</Appenders>
+	
+	<Loggers>
+		<Root level="debug">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="DailyRollingFile" />
+		</Root>
+	</Loggers>
+</Configuration>
