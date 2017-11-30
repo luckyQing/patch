@@ -6,7 +6,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 
 import com.luckytom.patch.model.ModelDTO;
-import com.luckytom.patch.util.MavenProjectUtil;
+import com.luckytom.patch.util.POMUtil;
 
 /**
  * maven web环境处理
@@ -47,7 +47,7 @@ public class MavenWebEnvService {
 	public static void initMavenWebEnv(String projectPath) {
 		ModelDTO modelDTO = getModelDTO(projectPath);
 		if (modelDTO.isReWrite()) {
-			MavenProjectUtil.writePOM(projectPath, modelDTO.getModel());
+			POMUtil.writePOM(projectPath, modelDTO.getModel());
 		}
 	}
 
@@ -58,7 +58,7 @@ public class MavenWebEnvService {
 	 * @return
 	 */
 	private static ModelDTO getModelDTO(String projectPath) {
-		Model model = MavenProjectUtil.readModel(projectPath);
+		Model model = POMUtil.readModel(projectPath);
 
 		ModelDTO modelDTO = new ModelDTO(model, false);
 		List<Dependency> dependencyList = model.getDependencies();

@@ -1,13 +1,14 @@
 package com.luckytom.patch.util;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.luckytom.patch.model.ProjectDTO;
+import com.luckytom.patch.model.PackageDTO;
+import com.luckytom.patch.model.PatchProjectDTO;
+import com.luckytom.patch.model.PatchProjectInfoDTO;
 import com.luckytom.patch.service.MavenWebEnvService;
 
 /**
@@ -20,8 +21,8 @@ public final class MavenUtil {
 
 	/** cpu内核数 */
 	public static final int CPU_CORE_NUM = Runtime.getRuntime().availableProcessors();
-	public static final String MAVEN_THREAD_PARAMETER = "-T"+CPU_CORE_NUM;
-	
+	public static final String MAVEN_THREAD_PARAMETER = "-T" + CPU_CORE_NUM;
+
 	public static class EnvCheck {
 		private static final String MAVEN_HOME_KEY = "MAVEN_HOME";
 		private static final String JAVA_HOME_KEY = "JAVA_HOME";
@@ -30,7 +31,7 @@ public final class MavenUtil {
 		public static boolean checkMavenEnv() {
 			boolean pass = StringUtils.isNotBlank(ENV_MAP.get(MAVEN_HOME_KEY));
 			if (!pass) {
-				ConsoleUtil.info("maven环境变量未设置！");
+				ConsoleUtil.error("maven环境变量未设置！");
 			}
 			return pass;
 		}
@@ -38,28 +39,28 @@ public final class MavenUtil {
 		public static boolean checkJDKEnv() {
 			boolean pass = StringUtils.isNotBlank(ENV_MAP.get(JAVA_HOME_KEY));
 			if (!pass) {
-				ConsoleUtil.info("jdk环境变量未设置！");
+				ConsoleUtil.error("jdk环境变量未设置！");
 			}
 			return pass;
 		}
 
 	}
 
-	public static boolean mvnCleanPackage(String projectPath) {
+	public static void mvnCleanPackage(String projectPath) {
 		List<String> commandList = new ArrayList<String>();
 		dealCmd(projectPath, commandList);
 
 		commandList.add("cd " + projectPath);
 		commandList.add("mvn clean package " + MAVEN_THREAD_PARAMETER + " -Dmaven.test.skip=true");
-		return CmdUtil.exeCmds(commandList.toArray(new String[commandList.size()]));
+		CmdUtil.exeCmds(commandList.toArray(new String[commandList.size()]));
 	}
 
-	public static boolean mvnInstall(String projectPath) {
+	public static void mvnInstall(String projectPath) {
 		List<String> commandList = new ArrayList<String>();
 		dealCmd(projectPath, commandList);
 		commandList.add("cd " + projectPath);
 		commandList.add("mvn install " + MAVEN_THREAD_PARAMETER + " -Dmaven.test.skip=true");
-		return CmdUtil.exeCmds(commandList.toArray(new String[commandList.size()]));
+		CmdUtil.exeCmds(commandList.toArray(new String[commandList.size()]));
 	}
 
 	private static void dealCmd(String projectPath, List<String> commandList) {
@@ -70,39 +71,31 @@ public final class MavenUtil {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	public static String getCompiledProject(String projectPath, List<String> dependencyProjectList) {
+	public static String getCompiledProject(PatchProjectDTO patchProject) {
 		ConsoleUtil.info("======>pom.xml检查...");
-		MavenWebEnvService.initMavenWebEnv(projectPath);
+		PatchProjectInfoDTO mainProject = patchProject.getMainProject();
+		List<PatchProjectInfoDTO> dependencyProjectList = patchProject.getDependencyProjectList();
+		
+		MavenWebEnvService.initMavenWebEnv(mainProject.getPath());
 		if (null != dependencyProjectList) {
-			for (String dependencyProject : dependencyProjectList) {
-				ProjectDTO dependencyProjectDTO = MavenProjectUtil.getProjectInfo(dependencyProject);
-				ConsoleUtil.info("======>install " + dependencyProjectDTO.getName() + "...");
+			for (PatchProjectInfoDTO dependencyProject : dependencyProjectList) {
+				PackageDTO dependencyPackageDTO = POMUtil.getPackageDTO(dependencyProject.getPath());
+				dependencyProject.setPackageDTO(dependencyPackageDTO);
+				ConsoleUtil.info("======>install " + dependencyPackageDTO.getPackagingName() + "...");
 				
-				if (!MavenUtil.mvnInstall(dependencyProject)) {
-					Thread.currentThread().stop();
-				}
+				MavenUtil.mvnInstall(dependencyProject.getPath());
 			}
 		}
 
-		ProjectDTO projectDTO = MavenProjectUtil.getProjectInfo(projectPath);
-		ConsoleUtil.info("======>package " + projectDTO.getName() + "...");
-		if (!MavenUtil.mvnCleanPackage(projectPath)) {
-			Thread.currentThread().stop();
-		}
-		
-		StringBuilder compiledProjectPath = new StringBuilder(100);
-		compiledProjectPath.append(projectPath)
-						   .append(File.separator)
-						   .append("target")
-						   .append(File.separator)
-						   .append(projectDTO.getName())
-						   .append(".")
-						   .append(projectDTO.getPackagingType());
-		
-		ConsoleUtil.info(projectDTO.getName()+"."+projectDTO.getPackagingType()+"路径======>"+compiledProjectPath.toString());
-		
+		PackageDTO mainPackageDTO = POMUtil.getPackageDTO(mainProject.getPath());
+		mainProject.setPackageDTO(mainPackageDTO);
+		ConsoleUtil.info("======>package " + mainPackageDTO.getPackagingName() + "...");
+		MavenUtil.mvnCleanPackage(mainProject.getPath());
+
+		String compiledProjectPath = FileUtil.getCompileJarPath(mainProject.getPath(), mainPackageDTO.getCompileJarName());
+		ConsoleUtil.info(mainPackageDTO.getCompileJarName() + "路径======>" + compiledProjectPath);
+
 		return compiledProjectPath.toString();
 	}
-	
+
 }

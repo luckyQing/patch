@@ -9,23 +9,27 @@ import java.util.List;
  * @version 1.0 2017年11月5日 上午11:55:15
  */
 public class SettingDO {
+	/** 控制台日志开关 */
 	private boolean logSwitch;
+	/** 补丁生成路径 */
 	private String patchPath;
-	private String localProjectPath;
-	private TeamPluginDO teamPluginDO;
+	/** 补丁相关工程 */
+	private PatchProjectDTO patchProject;
+	/** svn日志过滤参数 */
+	private SVNLogFilterParam svnLogFilterParam;
 	private List<String> notDealFileList;
 
 	public SettingDO() {
 		super();
 	}
 
-	public SettingDO(boolean logSwitch, String patchPath, String localProjectPath, TeamPluginDO teamPluginDO,
-			List<String> notDealFileList) {
+	public SettingDO(boolean logSwitch, String patchPath, PatchProjectDTO patchProject,
+			SVNLogFilterParam svnLogFilterParam, List<String> notDealFileList) {
 		super();
 		this.logSwitch = logSwitch;
 		this.patchPath = patchPath;
-		this.localProjectPath = localProjectPath;
-		this.teamPluginDO = teamPluginDO;
+		this.patchProject = patchProject;
+		this.svnLogFilterParam = svnLogFilterParam;
 		this.notDealFileList = notDealFileList;
 	}
 
@@ -45,20 +49,20 @@ public class SettingDO {
 		this.patchPath = patchPath;
 	}
 
-	public String getLocalProjectPath() {
-		return localProjectPath;
+	public PatchProjectDTO getPatchProject() {
+		return patchProject;
 	}
 
-	public void setLocalProjectPath(String localProjectPath) {
-		this.localProjectPath = localProjectPath;
+	public void setPatchProject(PatchProjectDTO patchProject) {
+		this.patchProject = patchProject;
 	}
 
-	public TeamPluginDO getTeamPluginDO() {
-		return teamPluginDO;
+	public SVNLogFilterParam getSvnLogFilterParam() {
+		return svnLogFilterParam;
 	}
 
-	public void setTeamPluginDO(TeamPluginDO teamPluginDO) {
-		this.teamPluginDO = teamPluginDO;
+	public void setSvnLogFilterParam(SVNLogFilterParam svnLogFilterParam) {
+		this.svnLogFilterParam = svnLogFilterParam;
 	}
 
 	public List<String> getNotDealFileList() {
@@ -71,8 +75,8 @@ public class SettingDO {
 
 	@Override
 	public String toString() {
-		return "SettingDO [logSwitch=" + logSwitch + ", patchPath=" + patchPath + ", localProjectPath="
-				+ localProjectPath + ", teamPluginDO=" + teamPluginDO + ", notDealFileList=" + notDealFileList + "]";
+		return "SettingDO [logSwitch=" + logSwitch + ", patchPath=" + patchPath + ", patchProject=" + patchProject
+				+ ", svnLogFilterParam=" + svnLogFilterParam + ", notDealFileList=" + notDealFileList + "]";
 	}
 
 }

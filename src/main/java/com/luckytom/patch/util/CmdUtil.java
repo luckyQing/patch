@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * console命令行执行工具类
  *
@@ -13,32 +16,32 @@ import java.io.Reader;
  * @version 1.0 2017年11月20日 下午9:54:00
  */
 public final class CmdUtil {
+	private static final Logger logger = LogManager.getFormatterLogger();
 	public static String systemEncoding;
 
 	static {
 		systemEncoding = System.getProperty("sun.jnu.encoding", "GBK");
 	}
 
-	public static boolean exeCmd(String cmd) {
+	public static void exeCmd(String cmd) {
 		ConsoleUtil.info("exec==>" + cmd);
 
 		Process process = null;
-		boolean execState = false;
 		try {
 			process = Runtime.getRuntime().exec(cmd);
 
-			execState = showNormalMsg(process) && showErrorMsg(process);
+			showNormalMsg(process);
+			showErrorMsg(process);
 		} catch (Exception e) {
-			ConsoleUtil.info(e.getMessage());
-			execState = false;
+			logger.error(e.getMessage(), e);
+			ConsoleUtil.error(e.getMessage());
 		} finally {
 			process.destroy();
 		}
-		return execState;
 	}
 
-	private static boolean showNormalMsg(Process process) {
-		return showConsoleMsg(process.getInputStream());
+	private static void showNormalMsg(Process process) {
+		showConsoleMsg(process.getInputStream());
 	}
 
 	private static boolean showErrorMsg(Process process) {
@@ -49,7 +52,7 @@ public final class CmdUtil {
 		return true;
 	}
 
-	private static boolean showConsoleMsg(InputStream inputStream) {
+	private static void showConsoleMsg(InputStream inputStream) {
 		try (InputStream in = inputStream; // 为了自动关闭InputStream
 				Reader reader = new InputStreamReader(in, systemEncoding);
 				BufferedReader bufferedReader = new BufferedReader(reader);) {
@@ -58,10 +61,9 @@ public final class CmdUtil {
 				ConsoleUtil.info(result);
 			}
 		} catch (IOException e) {
-			ConsoleUtil.info(e.getMessage());
-			return false;
+			logger.error(e.getMessage(), e);
+			ConsoleUtil.error(e.getMessage());
 		}
-		return true;
 	}
 
 	/**
@@ -74,7 +76,7 @@ public final class CmdUtil {
 	 * @param commands
 	 * @return
 	 */
-	public static boolean exeCmds(String[] commands) {
+	public static void exeCmds(String[] commands) {
 		StringBuilder sb = new StringBuilder("cmd /c ");
 		for (int i = 0, size = commands.length; i < size; i++) {
 			if (i > 0) {
@@ -83,7 +85,7 @@ public final class CmdUtil {
 			sb.append(commands[i]);
 		}
 
-		return exeCmd(sb.toString());
+		exeCmd(sb.toString());
 	}
 	
 }

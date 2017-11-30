@@ -22,5 +22,11 @@ public final class ConsoleUtil {
 			Platform.runLater(new LogRunnable(mLogTextArea, text));
 		}
 	}
+	
+	@SuppressWarnings("deprecation")
+	public static void error(String text) {
+		info(text);
+		Thread.currentThread().stop();
+	}
 
 }

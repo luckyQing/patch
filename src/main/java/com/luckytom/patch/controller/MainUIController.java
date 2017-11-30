@@ -2,8 +2,6 @@ package com.luckytom.patch.controller;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import com.luckytom.patch.model.SettingDO;
@@ -47,7 +45,7 @@ public class MainUIController implements Initializable {
 	private TextField patchPathTextField;
 	@FXML
 	private TextArea excludeFilesTextArea;
-	private SettingDO settingDO;
+	private SettingDO setting;
 	private Stage primaryStage;
 
 	@Override
@@ -60,7 +58,7 @@ public class MainUIController implements Initializable {
 		teamPluginTypeChoiceBox.setItems(teamPluginTypeObservableList);
 		teamPluginTypeChoiceBox.setValue(TeamPluginType.SVN.getName());
 
-		settingDO = new SettingDO();
+		setting = new SettingDO();
 	}
 	
 	public void fixLogTextArea() {
@@ -87,7 +85,7 @@ public class MainUIController implements Initializable {
 			logSwitchRadioMenuItemText = "日志开关（关）";
 		}
 		logSwitchRadioMenuItem.setText(logSwitchRadioMenuItemText);
-		settingDO.setLogSwitch(logSwitchRadioMenuItem.isSelected());
+		setting.setLogSwitch(logSwitchRadioMenuItem.isSelected());
 	}
 
 	public void onChangeConfig() {
@@ -107,14 +105,23 @@ public class MainUIController implements Initializable {
 	}
 
 	public void onGeneratePatch() {
-		String apiPath = "E:/github/demo/SpringSecuritySimpleDemo";
+//		TeamPluginDO mainTeamPlugin = new TeamPluginDO(serverUrl, username, password);
+//		PatchProjectInfoDTO mainProject = new PatchProjectInfoDTO("E:\\jfq\\code\\V520_for_deploy\\API", mainTeamPlugin);
 
-//		List<String> dependencyProjectList = new ArrayList<>();
-//		dependencyProjectList.add("E:\\jfq\\code\\V520_for_deploy\\server_common");
-//		dependencyProjectList.add("E:\\jfq\\code\\V520_for_deploy\\domain_common");
-//		dependencyProjectList.add("E:\\jfq\\code\\V520_for_deploy\\commbusi_api");
+//		List<PatchProjectInfoDTO> dependencyProjectList = new ArrayList<PatchProjectInfoDTO>();
+//		dependencyProjectList.add(new PatchProjectInfoDTO("E:\\jfq\\code\\V520_for_deploy\\server_common"));
+//		dependencyProjectList.add(new PatchProjectInfoDTO("E:\\jfq\\code\\V520_for_deploy\\domain_common"));
+//		dependencyProjectList.add(new PatchProjectInfoDTO("E:\\jfq\\code\\V520_for_deploy\\commbusi_api"));
 		
-		PatchService.generatePatch(apiPath, null);
+//		PatchProjectDTO patchProject = new PatchProjectDTO(mainProject, dependencyProjectList);
+//		
+//		String startTime = "2017-11-20 01:00:00";
+//		String endTime = "2017-11-28 16:00:00";
+//		String author = null;//"yanghua";
+//
+//		SVNLogFilterParam svnLogFilterParam = new SVNLogFilterParam(startTime, endTime, author);
+		// TODO:init setting param
+		PatchService.generatePatch(setting);
 	}
 
 	public void onSaveConfig() {

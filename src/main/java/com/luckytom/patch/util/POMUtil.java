@@ -6,21 +6,24 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import com.luckytom.patch.model.ProjectDTO;
+import com.luckytom.patch.model.PackageDTO;
 
 /**
- * maven工程工具类
+ * pom.xml工具类
  * 
  * @author liyulin
  * @version 1.0 2017年11月23日 上午10:10:57
  */
-public class MavenProjectUtil {
+public class POMUtil {
+	private static final Logger logger = LogManager.getFormatterLogger();
 	
 	/**
 	 * 获取项目信息
@@ -28,7 +31,7 @@ public class MavenProjectUtil {
 	 * @param projectPath
 	 * @return
 	 */
-	public static ProjectDTO getProjectInfo(String projectPath) {
+	public static PackageDTO getPackageDTO(String projectPath) {
 		Model model = readModel(projectPath);
 
 		String packagingType = model.getPackaging();
@@ -40,8 +43,9 @@ public class MavenProjectUtil {
 		} else {
 			name = model.getArtifactId();
 		}
+		String version = model.getVersion();
 
-		return new ProjectDTO(name, packagingType);
+		return new PackageDTO(name, version, packagingType);
 	}
 	
 	/**
@@ -51,7 +55,13 @@ public class MavenProjectUtil {
 	 * @return
 	 */
 	public static String getPOMPath(String projectPath) {
-		return projectPath + File.separator + "pom.xml";
+		StringBuilder pomPath = new StringBuilder(projectPath);
+		if(!FileUtil.hasSeparator(projectPath)) {
+			pomPath.append(File.separator);
+		}
+		pomPath.append("pom.xml");
+		
+		return pomPath.toString();
 	}
 
 	/**
@@ -66,11 +76,14 @@ public class MavenProjectUtil {
 		try {
 			model = mavenXpp3Reader.read(new FileReader(getPOMPath(projectPath)));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			ConsoleUtil.error(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			ConsoleUtil.error(e.getMessage());
 		} catch (XmlPullParserException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			ConsoleUtil.error(e.getMessage());
 		}
 
 		return model;
@@ -87,7 +100,8 @@ public class MavenProjectUtil {
 		try {
 			mavenXpp3Writer.write(new FileWriter(getPOMPath(projectPath)), model);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
+			ConsoleUtil.error(e.getMessage());
 		}
 	}
 
