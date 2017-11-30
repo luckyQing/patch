@@ -2,6 +2,7 @@ package com.luckytom.patch.runnable;
 
 import java.util.List;
 
+import com.luckytom.patch.constants.Strings;
 import com.luckytom.patch.model.PatchProjectDTO;
 import com.luckytom.patch.model.SettingDO;
 import com.luckytom.patch.model.TeamPluginDO;
@@ -35,7 +36,7 @@ public class PatchRunnable implements Runnable {
 		TeamPluginDO mainTeamPlugin = patchProject.getMainProject().getTeamPlugin();
 		List<String> patchFileList = SvnPatchUtil.getPatchList(mainTeamPlugin, setting.getSvnLogFilterParam());
 		if ((null == patchFileList || patchFileList.size() == 0) && !isUpdate) {
-			AlertUtil.showInfoAlert("无更新文件，无补丁包可生成！");
+			AlertUtil.showInfoAlert(Strings.NO_PATCH);
 		} else {
 			// compile project
 			String warPath = MavenUtil.getCompiledProject(patchProject);
@@ -50,7 +51,8 @@ public class PatchRunnable implements Runnable {
 			PatchUtil.generatePatch(patchFileList, pomTeamPlugin, patchProject, setting.getPatchPath(), tmpUnWarDirUrl);
 			
 			String compileJarName = patchProject.getMainProject().getPackageDTO().getCompileJarName();
-			ConsoleUtil.info(compileJarName + "补丁生成路径======>" + setting.getPatchPath());
+			String patchPath = String.format(Strings.PATCH_PATH, compileJarName, setting.getPatchPath());
+			ConsoleUtil.info(patchPath);
 			
 			// delete temp file dir
 			FileUtil.deleteTmpDir(tmpUnWarDirUrl);

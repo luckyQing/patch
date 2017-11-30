@@ -27,11 +27,6 @@ public final class PatchDict {
 		public static final String APP = "icons/patch.jpg";
 	}
 
-	public static final class SubmitLog {
-		public static final String LOG = "版本号：%s ==>作者：%s ==>提交时间：%s ==>备注：%s";
-		public static final String LOG_DETAIL = "====>%s：%s";
-	}
-
 	public static final class ProjectInfo {
 		public static final String LIB = "lib";
 		public static final String JAVA = "java";

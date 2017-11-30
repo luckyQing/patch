@@ -1,5 +1,6 @@
 package com.luckytom.patch.service;
 
+import com.luckytom.patch.constants.Strings;
 import com.luckytom.patch.model.SettingDO;
 import com.luckytom.patch.runnable.PatchRunnable;
 import com.luckytom.patch.util.ConsoleUtil;
@@ -14,7 +15,7 @@ import com.luckytom.patch.util.MavenUtil;
 public class PatchService {
 	
 	public static void generatePatch(SettingDO setting) {
-		ConsoleUtil.info("环境检查...");
+		ConsoleUtil.info(Strings.CHECK_ENV);
 		if (MavenUtil.EnvCheck.checkJDKEnv() && MavenUtil.EnvCheck.checkMavenEnv()) {
 			Thread thread = new Thread(new PatchRunnable(setting));
 			thread.setDaemon(true);

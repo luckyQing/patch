@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.luckytom.patch.constants.Strings;
 import com.luckytom.patch.model.PackageDTO;
 import com.luckytom.patch.model.PatchProjectDTO;
 import com.luckytom.patch.model.PatchProjectInfoDTO;
@@ -72,7 +73,7 @@ public final class MavenUtil {
 	}
 
 	public static String getCompiledProject(PatchProjectDTO patchProject) {
-		ConsoleUtil.info("======>pom.xml检查...");
+		ConsoleUtil.info(Strings.COMPILE_CHECK_POM);
 		PatchProjectInfoDTO mainProject = patchProject.getMainProject();
 		List<PatchProjectInfoDTO> dependencyProjectList = patchProject.getDependencyProjectList();
 		
@@ -81,7 +82,7 @@ public final class MavenUtil {
 			for (PatchProjectInfoDTO dependencyProject : dependencyProjectList) {
 				PackageDTO dependencyPackageDTO = POMUtil.getPackageDTO(dependencyProject.getPath());
 				dependencyProject.setPackageDTO(dependencyPackageDTO);
-				ConsoleUtil.info("======>install " + dependencyPackageDTO.getPackagingName() + "...");
+				ConsoleUtil.info(String.format(Strings.INSTALL_PORJECT, dependencyPackageDTO.getPackagingName()));
 				
 				MavenUtil.mvnInstall(dependencyProject.getPath());
 			}
@@ -89,12 +90,13 @@ public final class MavenUtil {
 
 		PackageDTO mainPackageDTO = POMUtil.getPackageDTO(mainProject.getPath());
 		mainProject.setPackageDTO(mainPackageDTO);
-		ConsoleUtil.info("======>package " + mainPackageDTO.getPackagingName() + "...");
+		ConsoleUtil.info(String.format(Strings.PACKAGE_PROJECT, mainPackageDTO.getPackagingName()));
 		MavenUtil.mvnCleanPackage(mainProject.getPath());
 
 		String compiledProjectPath = FileUtil.getCompileJarPath(mainProject.getPath(), mainPackageDTO.getCompileJarName());
-		ConsoleUtil.info(mainPackageDTO.getCompileJarName() + "路径======>" + compiledProjectPath);
-
+		String result = String.format(Strings.COMPILE_RESULT, mainPackageDTO.getCompileJarName(), compiledProjectPath);
+		ConsoleUtil.info(result);
+		
 		return compiledProjectPath.toString();
 	}
 

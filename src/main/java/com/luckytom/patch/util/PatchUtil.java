@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 
@@ -23,7 +21,6 @@ import com.luckytom.patch.model.TeamPluginDO;
  * @version 1.0 2017年11月23日 上午9:33:35
  */
 public final class PatchUtil {
-	private static final Logger logger = LogManager.getFormatterLogger();
 	
 	/**
 	 * deal dependency projects
@@ -44,37 +41,29 @@ public final class PatchUtil {
 		return isUpdate;
 	}
 
-	public static boolean generatePatch(List<String> updateFileList, TeamPluginDO pomTeamPlugin, PatchProjectDTO patchProject, String patchDir, String tmpUnWarDirUrl) {
-		if (null == updateFileList || updateFileList.size() == 0) {
-			logger.info("无变更记录，无补丁包生成！");
-			return true;
+	public static void generatePatch(List<String> updateFileList, TeamPluginDO pomTeamPlugin, PatchProjectDTO patchProject, String patchDir, String tmpUnWarDirUrl) {
+		if (null != updateFileList && updateFileList.size() > 0) {
+			List<PatchProjectInfoDTO> dependencyProjectList = patchProject.getDependencyProjectList();
+			PatchProjectInfoDTO mainProject = patchProject.getMainProject();
+			String packagingName = mainProject.getPackageDTO().getPackagingName();
+			String compileMainProjectPath = tmpUnWarDirUrl +File.separator + packagingName;
+			// 1、main project
+			// 1.1 main/java
+			dealJavaFiles(packagingName, compileMainProjectPath, patchDir, updateFileList);
+			// 1.2 main/recource
+			dealResource(packagingName, compileMainProjectPath, patchDir, updateFileList);
+			// 1.3 webapp
+			dealWebapp(packagingName, compileMainProjectPath, patchDir, updateFileList);
+			// 1.4 pom.xml
+			dealPOM(updateFileList, pomTeamPlugin, compileMainProjectPath, patchDir);
+			
+			// 2、dependency project
+			for (PatchProjectInfoDTO dependencyProject : dependencyProjectList) {
+				FileUtil.copyDependencyProject(dependencyProject, patchDir, packagingName);
+			}
 		}
-
-		List<PatchProjectInfoDTO> dependencyProjectList = patchProject.getDependencyProjectList();
-		PatchProjectInfoDTO mainProject = patchProject.getMainProject();
-		String packagingName = mainProject.getPackageDTO().getPackagingName();
-		String compileMainProjectPath = tmpUnWarDirUrl +File.separator + packagingName;
-		// 1、main project
-		// 1.1 main/java
-		dealJavaFiles(packagingName, compileMainProjectPath, patchDir, updateFileList);
-		// 1.2 main/recource
-		dealResource(packagingName, compileMainProjectPath, patchDir, updateFileList);
-		// 1.3 webapp
-		dealWebapp(packagingName, compileMainProjectPath, patchDir, updateFileList);
-		// 1.4 pom.xml
-		dealPOM(updateFileList, pomTeamPlugin, compileMainProjectPath, patchDir);
-		
-		// 2、dependency project
-		for (PatchProjectInfoDTO dependencyProject : dependencyProjectList) {
-			FileUtil.copyDependencyProject(dependencyProject, patchDir, packagingName);
-		}
-		return false;
 	}
 	
-	public static void dealWebapp() {
-		
-	}
-
 	/**
 	 * 判断pom.xml是否更新
 	 * @param packagingName

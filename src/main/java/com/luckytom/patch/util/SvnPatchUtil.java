@@ -27,7 +27,7 @@ import org.tmatesoft.svn.core.wc2.SvnOperationFactory;
 import org.tmatesoft.svn.core.wc2.SvnRevisionRange;
 import org.tmatesoft.svn.core.wc2.SvnTarget;
 
-import com.luckytom.patch.constants.PatchDict;
+import com.luckytom.patch.constants.Strings;
 import com.luckytom.patch.model.SVNLogFilterParam;
 import com.luckytom.patch.model.TeamPluginDO;
 
@@ -43,10 +43,10 @@ public final class SvnPatchUtil {
 	private static Map<Character, String> fileChangeTypeMap;
 	static {
 		fileChangeTypeMap = new HashMap<Character, String>(4);
-		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_ADDED, "新增");
-		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_MODIFIED, "修改");
-		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_DELETED, "删除");
-		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_REPLACED, "替换");
+		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_ADDED, Strings.TYPE_ADDED);
+		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_MODIFIED, Strings.TYPE_MODIFIED);
+		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_DELETED, Strings.TYPE_DELETED);
+		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_REPLACED, Strings.TYPE_REPLACED);
 		
 		initSvn();
 	}
@@ -155,7 +155,7 @@ public final class SvnPatchUtil {
 			if (StringUtils.isNotBlank(author) && !author.equals(svnLogEntry.getAuthor())) {
 				continue;
 			} 
-			String subLog = String.format(PatchDict.SubmitLog.LOG, 
+			String subLog = String.format(Strings.SVN_LOG_DETAIL, 
 					  svnLogEntry.getRevision(),
 					  svnLogEntry.getAuthor(), 
 					  DateUtil.SDF_YYYYMMDDHHMMSS.get().format(svnLogEntry.getDate()), 
@@ -165,7 +165,7 @@ public final class SvnPatchUtil {
 			Map<String, SVNLogEntryPath> changedPathsMap = svnLogEntry.getChangedPaths();
 			if (changedPathsMap.size() > 0) {
 				for (Map.Entry<String, SVNLogEntryPath> entry : changedPathsMap.entrySet()) {
-					String logDetail = String.format(PatchDict.SubmitLog.LOG_DETAIL,
+					String logDetail = String.format(Strings.SNV_OPERATION_LOG,
 													 fileChangeTypeMap.get(entry.getValue().getType()), 
 													 entry.getKey());
 					logger.info(logDetail);
@@ -220,7 +220,7 @@ public final class SvnPatchUtil {
 	}
 	
 	private static void exportFile(SvnOperationFactory svnOperationFactory, long version, SvnTarget source, String localUrl){
-		logger.info("export 开始==>"+localUrl);
+		logger.info(String.format(Strings.EXPORT_FILE_START, localUrl));
 		SvnExport  svnExport = svnOperationFactory.createExport();
 		svnExport.addTarget(SvnTarget.fromFile(new File(localUrl)));
 		svnExport.setRevision(SVNRevision.create(version));
@@ -233,24 +233,7 @@ public final class SvnPatchUtil {
 			logger.error(e.getMessage(), e);
 			ConsoleUtil.error(e.getMessage());
 		}
-		logger.info("export 结束==>"+localUrl); 
-	}
-
-	public static void main(String[] args) throws Exception {
-//		String startTime = null;//"2017-11-20 01:00:00";
-//		String endTime = null;//"2017-11-28 16:00:00";
-//		String author = null;//"yanghua";
-//
-//		SVNLogFilterParam svnLogFilterParam = new SVNLogFilterParam(startTime, endTime, author);
-//
-//		String svnRoot = "http://192.168.1.47/svn/product/dev/03_接口相关/第三方接口/test.txt";
-//		String svnUsername = "kangduo";
-//		String svnPassword = "kd_8855";
-//
-//		TeamPluginDO teamPlugin = new TeamPluginDO(svnRoot, svnUsername, svnPassword);
-//		getPatchList(teamPlugin, svnLogFilterParam);
-//		downOldPOM(teamPlugin, "E:/test/test.txt");
-//		exportOldPOM(teamPlugin, "E:/test/test.txt");
+		logger.info(String.format(Strings.EXPORT_FILE_END, localUrl)); 
 	}
 
 }
