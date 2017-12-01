@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.luckytom.patch.constants.Strings;
 import com.luckytom.patch.model.PackageDTO;
@@ -19,7 +21,7 @@ import com.luckytom.patch.service.MavenWebEnvService;
  * @version 1.0 2017年11月21日 上午10:27:06
  */
 public final class MavenUtil {
-
+	private static final Logger logger = LogManager.getFormatterLogger();
 	/** cpu内核数 */
 	public static final int CPU_CORE_NUM = Runtime.getRuntime().availableProcessors();
 	public static final String MAVEN_THREAD_PARAMETER = "-T" + CPU_CORE_NUM;
@@ -32,7 +34,7 @@ public final class MavenUtil {
 		public static boolean checkMavenEnv() {
 			boolean pass = StringUtils.isNotBlank(ENV_MAP.get(MAVEN_HOME_KEY));
 			if (!pass) {
-				ConsoleUtil.error("maven环境变量未设置！");
+				logger.error("maven环境变量未设置！");
 			}
 			return pass;
 		}
@@ -40,7 +42,7 @@ public final class MavenUtil {
 		public static boolean checkJDKEnv() {
 			boolean pass = StringUtils.isNotBlank(ENV_MAP.get(JAVA_HOME_KEY));
 			if (!pass) {
-				ConsoleUtil.error("jdk环境变量未设置！");
+				logger.error("jdk环境变量未设置！");
 			}
 			return pass;
 		}
@@ -73,7 +75,7 @@ public final class MavenUtil {
 	}
 
 	public static String getCompiledProject(PatchProjectDTO patchProject) {
-		ConsoleUtil.info(Strings.COMPILE_CHECK_POM);
+		logger.info(Strings.COMPILE_CHECK_POM);
 		PatchProjectInfoDTO mainProject = patchProject.getMainProject();
 		List<PatchProjectInfoDTO> dependencyProjectList = patchProject.getDependencyProjectList();
 		
@@ -82,7 +84,7 @@ public final class MavenUtil {
 			for (PatchProjectInfoDTO dependencyProject : dependencyProjectList) {
 				PackageDTO dependencyPackageDTO = POMUtil.getPackageDTO(dependencyProject.getPath());
 				dependencyProject.setPackageDTO(dependencyPackageDTO);
-				ConsoleUtil.info(String.format(Strings.INSTALL_PORJECT, dependencyPackageDTO.getPackagingName()));
+				logger.info(String.format(Strings.INSTALL_PORJECT, dependencyPackageDTO.getPackagingName()));
 				
 				MavenUtil.mvnInstall(dependencyProject.getPath());
 			}
@@ -90,12 +92,12 @@ public final class MavenUtil {
 
 		PackageDTO mainPackageDTO = POMUtil.getPackageDTO(mainProject.getPath());
 		mainProject.setPackageDTO(mainPackageDTO);
-		ConsoleUtil.info(String.format(Strings.PACKAGE_PROJECT, mainPackageDTO.getPackagingName()));
+		logger.info(String.format(Strings.PACKAGE_PROJECT, mainPackageDTO.getPackagingName()));
 		MavenUtil.mvnCleanPackage(mainProject.getPath());
 
 		String compiledProjectPath = FileUtil.getCompileJarPath(mainProject.getPath(), mainPackageDTO.getCompileJarName());
 		String result = String.format(Strings.COMPILE_RESULT, mainPackageDTO.getCompileJarName(), compiledProjectPath);
-		ConsoleUtil.info(result);
+		logger.info(result);
 		
 		return compiledProjectPath.toString();
 	}

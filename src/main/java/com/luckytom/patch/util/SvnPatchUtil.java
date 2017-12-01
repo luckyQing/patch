@@ -75,7 +75,6 @@ public final class SvnPatchUtil {
 			target = SvnTarget.fromURL(SVNURL.parseURIEncoded(teamPlugin.getServerUrl()));
 		} catch (SVNException e) {
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		}
 		List<SVNLogEntry> svnLogEntryList = getSVNLogEntryList(svnOperationFactory, svnRevisionRange, target, null);
 		
@@ -95,7 +94,6 @@ public final class SvnPatchUtil {
 			
 		} catch (ParseException e) {
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		}
 		
 		return SvnRevisionRange.create(startSVNRevision, endSVNRevision);
@@ -138,7 +136,6 @@ public final class SvnPatchUtil {
 			log.run(svnLogEntryList);
 		} catch (SVNException e) {
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		}
 		return svnLogEntryList;
 	}
@@ -192,7 +189,6 @@ public final class SvnPatchUtil {
 			target = SvnTarget.fromURL(SVNURL.parseURIEncoded(teamPlugin.getServerUrl()));
 		} catch (SVNException e) {
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		}
 		Long oldVersion = getPOMLastVersion(svnOperationFactory, target);
 		if(null==oldVersion) {
@@ -231,7 +227,6 @@ public final class SvnPatchUtil {
 			svnExport.run();
 		} catch (SVNException e) {
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		}
 		logger.info(String.format(Strings.EXPORT_FILE_END, localUrl)); 
 	}

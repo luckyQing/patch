@@ -24,7 +24,7 @@ public final class CmdUtil {
 	}
 
 	public static void exeCmd(String cmd) {
-		ConsoleUtil.info("exec==>" + cmd);
+		logger.info("exec==>" + cmd);
 
 		Process process = null;
 		try {
@@ -34,7 +34,6 @@ public final class CmdUtil {
 			showErrorMsg(process);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		} finally {
 			process.destroy();
 		}
@@ -58,11 +57,10 @@ public final class CmdUtil {
 				BufferedReader bufferedReader = new BufferedReader(reader);) {
 			String result = "";
 			while ((result = bufferedReader.readLine()) != null) {
-				ConsoleUtil.info(result);
+				logger.info(result);
 			}
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		}
 	}
 

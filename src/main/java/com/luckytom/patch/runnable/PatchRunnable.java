@@ -2,12 +2,14 @@ package com.luckytom.patch.runnable;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.luckytom.patch.constants.Strings;
 import com.luckytom.patch.model.PatchProjectDTO;
 import com.luckytom.patch.model.SettingDO;
 import com.luckytom.patch.model.TeamPluginDO;
 import com.luckytom.patch.util.AlertUtil;
-import com.luckytom.patch.util.ConsoleUtil;
 import com.luckytom.patch.util.FileUtil;
 import com.luckytom.patch.util.MavenUtil;
 import com.luckytom.patch.util.POMUtil;
@@ -21,6 +23,7 @@ import com.luckytom.patch.util.SvnPatchUtil;
  * @version 1.0 2017年11月23日 上午11:22:07
  */
 public class PatchRunnable implements Runnable {
+	private static final Logger logger = LogManager.getFormatterLogger();
 	private SettingDO setting;
 
 	public PatchRunnable(SettingDO setting) {
@@ -54,7 +57,7 @@ public class PatchRunnable implements Runnable {
 			
 			String compileJarName = patchProject.getMainProject().getPackageDTO().getCompileJarName();
 			String patchPath = String.format(Strings.PATCH_PATH, compileJarName, setting.getPatchPath());
-			ConsoleUtil.info(patchPath);
+			logger.info(patchPath);
 			
 			// delete temp file dir
 			FileUtil.deleteTmpDir(tmpUnWarDirUrl);

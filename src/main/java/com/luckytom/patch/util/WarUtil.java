@@ -33,11 +33,6 @@ public final class WarUtil {
 	public static boolean unWar(String warPath, String unWarPath) {
 		boolean opState = true;
 		File warFile = new File(warPath);
-		
-//		String warFileName = warFile.getName();
-//		String unWarDirName = warFileName.substring(0, warFileName.lastIndexOf("."));
-//		unWarPath = FileUtil.appendChildDir(unWarPath, unWarDirName);
-		
 		try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(warFile));
 				ArchiveInputStream archiveInputStream = new ArchiveStreamFactory().createArchiveInputStream(ArchiveStreamFactory.JAR, bufferedInputStream);) {
 			ArchiveEntry entry = null;
@@ -50,30 +45,21 @@ public final class WarUtil {
 					} catch (IOException e) {
 						opState = false;
 						logger.error(e.getMessage(), e);
-						ConsoleUtil.error(e.getMessage());
 					}
 				}
 			}
 		} catch (FileNotFoundException e) {
 			opState = false;
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		} catch (IOException e) {
 			opState = false;
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		} catch (ArchiveException e) {
 			opState = false;
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		}
 		
 		return opState;
 	}
 	
-	public static void main(String[] args) {
-		String warPath="E:\\jfq\\code\\V520_for_deploy\\API\\target\\API.war"; 
-		String unWarPath=FileUtil.getTmpDirUrl();
-		unWar(warPath, unWarPath);
-	}
 }

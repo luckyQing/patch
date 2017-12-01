@@ -77,13 +77,10 @@ public class POMUtil {
 			model = mavenXpp3Reader.read(new FileReader(getPOMPath(projectPath)));
 		} catch (FileNotFoundException e) {
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		} catch (XmlPullParserException e) {
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		}
 
 		return model;
@@ -101,7 +98,6 @@ public class POMUtil {
 			mavenXpp3Writer.write(new FileWriter(getPOMPath(projectPath)), model);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		}
 	}
 

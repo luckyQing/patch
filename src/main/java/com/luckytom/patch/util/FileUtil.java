@@ -83,7 +83,6 @@ public final class FileUtil {
 		
 		String log = "tmpDirUrl=" + tmpDirUrl;
 		logger.info(log);
-		ConsoleUtil.info(log);
 		
 		return tmpDirUrl;
 	}
@@ -154,7 +153,6 @@ public final class FileUtil {
 			FileUtils.copyFile(srcFile, destFile);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		}
 	}
 	
@@ -219,7 +217,6 @@ public final class FileUtil {
 		} catch (IOException e) {
 			opState = false;
 			logger.error(e.getMessage(), e);
-			ConsoleUtil.error(e.getMessage());
 		}
 		return opState;
 	}
