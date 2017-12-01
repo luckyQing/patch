@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 
-import com.luckytom.patch.constants.PatchDict;
+import com.luckytom.patch.constants.Constants;
 import com.luckytom.patch.model.PatchProjectDTO;
 import com.luckytom.patch.model.PatchProjectInfoDTO;
 import com.luckytom.patch.model.SVNLogFilterParam;
@@ -143,22 +143,22 @@ public final class PatchUtil {
 				if(isNew) {
 					String jarName = FileUtil.getCompileJarName(newDependency.getArtifactId(), newDependency.getVersion(), newDependency.getType());
 					
-					StringBuilder jarPath = new StringBuilder(PatchDict.StringCapacity.FILE_PATH);
+					StringBuilder jarPath = new StringBuilder(Constants.StringCapacity.FILE_PATH);
 					jarPath.append(projectPath)
 						   .append(File.separator)
-						   .append(PatchDict.ProjectInfo.WEB_INFO)
+						   .append(Constants.ProjectInfo.WEB_INFO)
 						   .append(File.separator)
-						   .append(PatchDict.ProjectInfo.LIB)
+						   .append(Constants.ProjectInfo.LIB)
 						   .append(File.separator)
 						   .append(jarName);
 					
-					StringBuilder destPath = new StringBuilder(PatchDict.StringCapacity.FILE_PATH);
+					StringBuilder destPath = new StringBuilder(Constants.StringCapacity.FILE_PATH);
 					destPath.append(patchDir).append(File.separator)
 						    .append(newModel.getArtifactId())
 						    .append(File.separator)
-						    .append(PatchDict.ProjectInfo.WEB_INFO)
+						    .append(Constants.ProjectInfo.WEB_INFO)
 						    .append(File.separator)
-						    .append(PatchDict.ProjectInfo.LIB)
+						    .append(Constants.ProjectInfo.LIB)
 						    .append(File.separator)
 						    .append(jarName);
 					
@@ -178,18 +178,18 @@ public final class PatchUtil {
 	 * @param updateFileList
 	 */
 	private static void dealWebapp(String packagingName, String projectPath, String patchDir, List<String> updateFileList) {
-		String key = packagingName+File.separator+PatchDict.ProjectInfo.SRC_MAIN_WEBAPP;
+		String key = packagingName+File.separator+Constants.ProjectInfo.SRC_MAIN_WEBAPP;
 		Iterator<String> updateFileIterable = updateFileList.iterator();
 		while (updateFileIterable.hasNext()) {
 			String svnUrl = updateFileIterable.next();
 			if (svnUrl.contains(key)) {
 				String name = svnUrl.substring(svnUrl.indexOf(key)+key.length(), svnUrl.length());
-				StringBuilder srcPath = new StringBuilder(PatchDict.StringCapacity.FILE_PATH);
+				StringBuilder srcPath = new StringBuilder(Constants.StringCapacity.FILE_PATH);
 				srcPath.append(projectPath)
 					   .append(File.separator)
 					   .append(name);
 				
-				StringBuilder destPath = new StringBuilder(PatchDict.StringCapacity.FILE_PATH);
+				StringBuilder destPath = new StringBuilder(Constants.StringCapacity.FILE_PATH);
 				destPath.append(patchDir)
 						.append(File.separator)
 						.append(packagingName)
@@ -211,7 +211,7 @@ public final class PatchUtil {
 	 * @param updateFileList
 	 */
 	private static void dealResource(String packagingName, String projectPath, String patchDir, List<String> updateFileList) {
-		String key = packagingName+File.separator+PatchDict.ProjectInfo.SRC_MAIN_RESOURCE;
+		String key = packagingName+File.separator+Constants.ProjectInfo.SRC_MAIN_RESOURCE;
 		Iterator<String> updateFileIterable = updateFileList.iterator();
 		while (updateFileIterable.hasNext()) {
 			String svnUrl = updateFileIterable.next();
@@ -234,7 +234,7 @@ public final class PatchUtil {
 	 * @param updateFileList
 	 */
 	private static void dealJavaFiles(String packagingName, String projectPath, String patchDir, List<String> updateFileList) {
-		String key = packagingName+File.separator+PatchDict.ProjectInfo.SRC_MAIN_JAVA;
+		String key = packagingName+File.separator+Constants.ProjectInfo.SRC_MAIN_JAVA;
 		System.err.println("key="+key);
 		Iterator<String> updateFileIterable = updateFileList.iterator();
 		while (updateFileIterable.hasNext()) {
@@ -243,8 +243,8 @@ public final class PatchUtil {
 				String packagingFilePath = svnUrl.substring(svnUrl.indexOf(key)+key.length(), svnUrl.length());
 				System.err.println("packagingFilePath="+packagingFilePath);
 				String srcPath = StringUtils.EMPTY;
-				if(packagingFilePath.endsWith(PatchDict.ProjectInfo.DOT_JAVA)) {
-					packagingFilePath = packagingFilePath.replace(PatchDict.ProjectInfo.DOT_JAVA, PatchDict.ProjectInfo.DOT_CLASS);
+				if(packagingFilePath.endsWith(Constants.ProjectInfo.DOT_JAVA)) {
+					packagingFilePath = packagingFilePath.replace(Constants.ProjectInfo.DOT_JAVA, Constants.ProjectInfo.DOT_CLASS);
 					srcPath = FileUtil.getSrcClassesPath(projectPath, null, packagingFilePath);
 					dealInnerClass(srcPath, packagingName, patchDir);
 				} else {
@@ -260,8 +260,8 @@ public final class PatchUtil {
 	
 	public static void dealInnerClass(String srcPath, String packagingName, String patchDir) {
 		File srcFile = new File(srcPath);
-		String srcFileName = srcFile.getName().replace(PatchDict.ProjectInfo.DOT_CLASS, "");
-		String innerClassRegex = srcFileName + "\\$[_A-Za-z][_A-Za-z0-9]{0,}"+PatchDict.ProjectInfo.DOT_CLASS;
+		String srcFileName = srcFile.getName().replace(Constants.ProjectInfo.DOT_CLASS, "");
+		String innerClassRegex = srcFileName + "\\$[_A-Za-z][_A-Za-z0-9]{0,}"+Constants.ProjectInfo.DOT_CLASS;
 		
 		System.err.println("srcPath="+srcPath);
 		System.err.println("srcFileName="+srcFileName);
@@ -273,7 +273,7 @@ public final class PatchUtil {
 			if(srcDirFile.getName().matches(innerClassRegex)){
 				System.err.println(srcDirFile.getName()+"===>innerClassRegex="+innerClassRegex);
 				String innerClassPath = srcDirFile.getPath();
-				String key = PatchDict.ProjectInfo.WEB_INFO_CLASSES;
+				String key = Constants.ProjectInfo.WEB_INFO_CLASSES;
 				String packagingFilePath = innerClassPath.substring(innerClassPath.indexOf(key)+key.length());
 				String destPath = FileUtil.getSrcClassesPath(patchDir, packagingName, packagingFilePath);
 				FileUtil.copyFile(innerClassPath, destPath);

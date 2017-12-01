@@ -1,6 +1,6 @@
 package com.luckytom.patch.model;
 
-import com.luckytom.patch.constants.PatchDict;
+import com.luckytom.patch.constants.Constants;
 import com.luckytom.patch.util.FileUtil;
 
 /**
@@ -52,9 +52,9 @@ public class PackageDTO {
 
 	public String getCompileJarName() {
 		if (null == compileJarName) {
-			if(PatchDict.ArchiveType.JAR.equals(packagingType)) {
+			if(Constants.ArchiveType.JAR.equals(packagingType)) {
 				compileJarName = FileUtil.getCompileJarName(packagingName, version, packagingType);
-			} else if(PatchDict.ArchiveType.WAR.equals(packagingType)) {
+			} else if(Constants.ArchiveType.WAR.equals(packagingType)) {
 				compileJarName = FileUtil.getCompileWarName(packagingName, packagingType);
 			}
 		}

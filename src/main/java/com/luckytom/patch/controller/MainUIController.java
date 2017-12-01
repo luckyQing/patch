@@ -59,8 +59,7 @@ public class MainUIController implements Initializable {
 		fixLogTextArea();
 		ConsoleUtil.setLogTextArea(logTextArea);
 
-		ObservableList<String> teamPluginTypeObservableList = FXCollections
-				.observableArrayList(TeamPluginType.getTeamPluginTypes());
+		ObservableList<String> teamPluginTypeObservableList = FXCollections.observableArrayList(TeamPluginType.getTeamPluginTypes());
 		teamPluginTypeChoiceBox.setItems(teamPluginTypeObservableList);
 		teamPluginTypeChoiceBox.setValue(TeamPluginType.SVN.getName());
 
@@ -166,6 +165,7 @@ public class MainUIController implements Initializable {
 //
 //		SVNLogFilterParam svnLogFilterParam = new SVNLogFilterParam(startTime, endTime, author);
 		// TODO:init setting param
+		
 		PatchService.generatePatch(setting);
 	}
 

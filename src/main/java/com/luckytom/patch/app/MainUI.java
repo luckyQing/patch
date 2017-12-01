@@ -3,7 +3,7 @@ package com.luckytom.patch.app;
 import java.io.IOException;
 import java.net.URL;
 
-import com.luckytom.patch.constants.PatchDict;
+import com.luckytom.patch.constants.Constants;
 import com.luckytom.patch.controller.MainUIController;
 
 import javafx.application.Application;
@@ -23,17 +23,17 @@ public class MainUI extends Application {
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		URL mainUIUrl = classLoader.getResource(PatchDict.Fxml.MAIN_UI);
+		URL mainUIUrl = classLoader.getResource(Constants.Fxml.MAIN_UI);
 		FXMLLoader fxmlLoader = new FXMLLoader(mainUIUrl);
 		
 		Scene scene = new Scene(fxmlLoader.load());
-		URL mainCssUrl = classLoader.getResource(PatchDict.Css.MAIN_UI);
+		URL mainCssUrl = classLoader.getResource(Constants.Css.MAIN_UI);
 		scene.getStylesheets().add(mainCssUrl.toExternalForm());
 		
 		primaryStage.setResizable(true);
-		primaryStage.setTitle(PatchDict.APP_NAME);
+		primaryStage.setTitle(Constants.APP_NAME);
 		
-		URL appIconUrl = classLoader.getResource(PatchDict.Icon.APP);
+		URL appIconUrl = classLoader.getResource(Constants.Icon.APP);
 		primaryStage.getIcons().add(new Image(appIconUrl.toExternalForm()));
 		primaryStage.setScene(scene);
 		primaryStage.show();

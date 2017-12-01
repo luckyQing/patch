@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.luckytom.patch.constants.PatchDict;
+import com.luckytom.patch.constants.Constants;
 import com.luckytom.patch.model.PackageDTO;
 
 /**
@@ -137,9 +137,9 @@ public final class FileUtil {
 			path.append(packagingName)
 				.append(File.separator);
 		}
-		path.append(PatchDict.ProjectInfo.WEB_INFO)
+		path.append(Constants.ProjectInfo.WEB_INFO)
 			.append(File.separator)
-			.append(PatchDict.ProjectInfo.CLASSES)
+			.append(Constants.ProjectInfo.CLASSES)
 			.append(File.separator)
 		    .append(packagingFilePath);
 		
@@ -170,9 +170,9 @@ public final class FileUtil {
 			srcFilePath.append(File.separator);
 		}
 		srcFilePath.append(File.separator)
-				   .append(PatchDict.ProjectInfo.WEB_INFO)
+				   .append(Constants.ProjectInfo.WEB_INFO)
 				   .append(File.separator)
-				   .append(PatchDict.ProjectInfo.LIB).append(File.separator).append(dependencyPackage.getCompileJarName());
+				   .append(Constants.ProjectInfo.LIB).append(File.separator).append(dependencyPackage.getCompileJarName());
 		
 		StringBuilder destFilePath = new StringBuilder(destFileDir);
 		if (!hasSeparator(destFileDir)) {
@@ -180,9 +180,9 @@ public final class FileUtil {
 		}
 		destFilePath.append(mainProjectName)
 					.append(File.separator)
-					.append(PatchDict.ProjectInfo.WEB_INFO)
+					.append(Constants.ProjectInfo.WEB_INFO)
 					.append(File.separator)
-					.append(PatchDict.ProjectInfo.LIB).append(File.separator).append(dependencyPackage.getCompileJarName());
+					.append(Constants.ProjectInfo.LIB).append(File.separator).append(dependencyPackage.getCompileJarName());
 		
 		copyFile(srcFilePath.toString(), destFilePath.toString());
 		return true;

@@ -124,11 +124,6 @@
                            </padding>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="200.0" GridPane.columnIndex="1">
-                           <children>
-                              <Button text="" style="-fx-background-image:url('../icons/console.png');"/>
-                              <Button mnemonicParsing="false" text="" style="-fx-background-image:url('../icons/console.png'); -fx-background-size: 35px;"/>
-                              <Button mnemonicParsing="false" text="" style="-fx-background-image:url('../icons/console.png'); -fx-background-size: 35px;"/>
-                           </children>
                            <opaqueInsets>
                               <Insets right="5.0" />
                            </opaqueInsets>

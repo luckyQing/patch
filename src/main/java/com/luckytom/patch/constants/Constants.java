@@ -8,7 +8,7 @@ import java.io.File;
  * @author liyulin
  * @version 1.0 2017年11月5日 上午11:54:36
  */
-public final class PatchDict {
+public final class Constants {
 	public static final String APP_NAME = "Web项目（maven）增量包工具";
 	
 	public static final class StringCapacity{
@@ -42,7 +42,7 @@ public final class PatchDict {
 		public static final String WEB_APP = "webapp";
 		public static final String RESOURCE = "resource";
 		public static final String SRC_MAIN_WEBAPP = "src" + File.separator + "main" + File.separator + WEB_APP + File.separator;
-		public static final String WEB_INFO_CLASSES = PatchDict.ProjectInfo.WEB_INFO + File.separator + PatchDict.ProjectInfo.CLASSES + File.separator;
+		public static final String WEB_INFO_CLASSES = Constants.ProjectInfo.WEB_INFO + File.separator + Constants.ProjectInfo.CLASSES + File.separator;
 		public static final String SRC_MAIN_RESOURCE = "src" + File.separator + "main" + File.separator  + RESOURCE + File.separator;
 		public static final String SRC_MAIN_JAVA = "src" + File.separator + "main" + File.separator + JAVA + File.separator;
 	}
