@@ -26,7 +26,7 @@ public class PatchProjectInfoDTO {
 		super();
 		this.path = path;
 		this.teamPlugin = teamPlugin;
-		this.update = true;
+		this.update = false;
 	}
 
 	public PatchProjectInfoDTO(String path, boolean update) {

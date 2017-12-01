@@ -2,14 +2,17 @@ package com.luckytom.patch.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.luckytom.patch.constants.PatchDict;
-import com.luckytom.patch.model.PatchProjectInfoDTO;
+import com.luckytom.patch.model.PackageDTO;
 
 /**
  * 文件操作工具类
@@ -23,7 +26,49 @@ public final class FileUtil {
 	public static boolean hasSeparator(String path) {
 		return path.endsWith("/") || path.endsWith("\\");
 	}
+	
+	private static void replaceSeparator(List<String> pathList, String separator) {
+		if(null!=pathList&&pathList.size()>0) {
+			String v = Matcher.quoteReplacement(File.separator);
+			for(int i=0; i<pathList.size(); i++) {
+				String path = pathList.get(i);
+				path = path.replaceAll(separator, v);
+				pathList.set(i, path);
+			}
+		}
+	}
 
+	public static void dealSeparator(List<String> pathList) {
+		if(null!=pathList&&pathList.size()>0) {
+			if(File.separator.equals("/")) {
+				replaceSeparator(pathList, "\\");
+			} else {
+				replaceSeparator(pathList, "/");
+			}
+		}
+	}
+	
+	/**
+	 * 删除文件夹下面的所有文件
+	 * 
+	 * @param patchDir
+	 */
+	public static void deleteDirFiles(String patchDir) {
+		File patchDirFile = new File(patchDir);
+		if (patchDirFile.exists()) {
+			File[] files = patchDirFile.listFiles();
+			if (null != files && files.length > 0) {
+				try {
+					for (File file : files) {
+						FileUtils.forceDelete(file);
+					}
+				} catch (IOException e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+		}
+	}
+	
 	/**
 	 * 获取一个临时文件夹
 	 * @return
@@ -35,6 +80,10 @@ public final class FileUtil {
 		} else {
 			tmpDirUrl = tmpDirUrl + File.separator + UUID.randomUUID().toString();
 		}
+		
+		String log = "tmpDirUrl=" + tmpDirUrl;
+		logger.info(log);
+		ConsoleUtil.info(log);
 		
 		return tmpDirUrl;
 	}
@@ -84,10 +133,12 @@ public final class FileUtil {
 	 */
 	public static String getSrcClassesPath(String patchDir, String packagingName, String packagingFilePath){
 		StringBuilder path = new StringBuilder(patchDir);
-		path.append(File.separator)
-			.append(packagingName)
-			.append(File.separator)
-			.append(PatchDict.ProjectInfo.WEB_INFO)
+		path.append(File.separator);
+		if(StringUtils.isNotBlank(packagingName)) {
+			path.append(packagingName)
+				.append(File.separator);
+		}
+		path.append(PatchDict.ProjectInfo.WEB_INFO)
 			.append(File.separator)
 			.append(PatchDict.ProjectInfo.CLASSES)
 			.append(File.separator)
@@ -109,48 +160,34 @@ public final class FileUtil {
 	
 	/**
 	 * 复制依赖包
-	 * @param dependencyProject
+	 * @param compileMainProjectPath
 	 * @param destFileDir
 	 * @param mainProjectName
 	 * @return
 	 */
-	public static boolean copyDependencyProject(PatchProjectInfoDTO dependencyProject, String destFileDir,
-			String packagingName) {
-		if (dependencyProject.isUpdate()) {
-			String compileJarName = dependencyProject.getPackageDTO().getCompileJarName();
-			String srcFilePath = getCompileJarPath(dependencyProject.getPath(), compileJarName);
-			StringBuilder destFilePath = new StringBuilder(destFileDir);
-			if (!hasSeparator(destFileDir)) {
-				destFilePath.append(File.separator);
-			}
-			destFilePath.append(packagingName)
-						.append(File.separator)
-						.append(PatchDict.ProjectInfo.WEB_INFO)
-						.append(File.separator)
-						.append(PatchDict.ProjectInfo.LIB).append(compileJarName);
-			
-			copyFile(srcFilePath, destFilePath.toString());
+	public static boolean copyDependencyProject(String compileMainProjectPath, String destFileDir, PackageDTO dependencyPackage) {
+		String mainProjectName = FileUtil.getProjectName(compileMainProjectPath);
+		StringBuilder srcFilePath = new StringBuilder(compileMainProjectPath);
+		if (!hasSeparator(destFileDir)) {
+			srcFilePath.append(File.separator);
 		}
-		return true;
-	}
-	
-	/**
-	 * 复制pom.xml
-	 * @param mainProject
-	 * @param patchDir
-	 */
-	public static void copyPOM(String path, String packagingName, String patchDir) {
-		String srcFilePath = POMUtil.getPOMPath(path);
+		srcFilePath.append(File.separator)
+				   .append(PatchDict.ProjectInfo.WEB_INFO)
+				   .append(File.separator)
+				   .append(PatchDict.ProjectInfo.LIB).append(File.separator).append(dependencyPackage.getCompileJarName());
 		
-		StringBuilder destFilePath = new StringBuilder(patchDir);
-		if(!FileUtil.hasSeparator(path)) {
+		StringBuilder destFilePath = new StringBuilder(destFileDir);
+		if (!hasSeparator(destFileDir)) {
 			destFilePath.append(File.separator);
 		}
-		destFilePath.append(packagingName);
-		destFilePath.append(File.separator);
-		destFilePath.append("pom.xml");
+		destFilePath.append(mainProjectName)
+					.append(File.separator)
+					.append(PatchDict.ProjectInfo.WEB_INFO)
+					.append(File.separator)
+					.append(PatchDict.ProjectInfo.LIB).append(File.separator).append(dependencyPackage.getCompileJarName());
 		
-		copyFile(srcFilePath, destFilePath.toString());
+		copyFile(srcFilePath.toString(), destFilePath.toString());
+		return true;
 	}
 	
 	/**
@@ -191,4 +228,14 @@ public final class FileUtil {
 		return name + "-" + version + "." + packagingType;
 	}
 	
+	public static String getCompileWarName(String name, String packagingType) {
+		return name + "." + packagingType;
+	}
+	
+	public static String appendChildDir(String path, String childDir) {
+		if (hasSeparator(path)) {
+			return path + childDir;
+		}
+		return path + File.separator + childDir;
+	}
 }

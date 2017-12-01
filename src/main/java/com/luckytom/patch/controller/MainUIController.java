@@ -2,9 +2,15 @@ package com.luckytom.patch.controller;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import com.luckytom.patch.model.PatchProjectDTO;
+import com.luckytom.patch.model.PatchProjectInfoDTO;
+import com.luckytom.patch.model.SVNLogFilterParam;
 import com.luckytom.patch.model.SettingDO;
+import com.luckytom.patch.model.TeamPluginDO;
 import com.luckytom.patch.model.TeamPluginType;
 import com.luckytom.patch.service.PatchService;
 import com.luckytom.patch.util.AlertUtil;
@@ -58,7 +64,46 @@ public class MainUIController implements Initializable {
 		teamPluginTypeChoiceBox.setItems(teamPluginTypeObservableList);
 		teamPluginTypeChoiceBox.setValue(TeamPluginType.SVN.getName());
 
+		initSetting();
+	}
+	
+	public void initSetting() {
 		setting = new SettingDO();
+		setting.setLogSwitch(true);
+		setting.setPatchPath("E:/test");
+		
+		String startTime = "2017-12-01 11:00:00";
+		String endTime = "2017-12-01 13:00:00";
+		String author = "yanghua";;
+
+		SVNLogFilterParam svnLogFilterParam = new SVNLogFilterParam(startTime, endTime, author);
+		setting.setSvnLogFilterParam(svnLogFilterParam);
+		
+		String mainPath = "E:\\jfq\\code\\V520_for_deploy\\API";
+		TeamPluginDO teamPlugin = new TeamPluginDO("http://192.168.1.47/svn/product/dev/04_code/server/branches/V520_for_deploy/API", "kangduo", "kd_8855");
+		PatchProjectInfoDTO mainProject = new PatchProjectInfoDTO(mainPath, teamPlugin);
+		
+		List<PatchProjectInfoDTO> dependencyProjectList = new ArrayList<PatchProjectInfoDTO>();
+		{
+			String serverCommonPath = "E:\\jfq\\code\\V520_for_deploy\\server_common";
+			TeamPluginDO serverCommonteamPlugin = new TeamPluginDO("http://192.168.1.47/svn/product/dev/04_code/server/branches/V520_for_deploy/server_common", "kangduo", "kd_8855");
+			PatchProjectInfoDTO serverCommonProject = new PatchProjectInfoDTO(serverCommonPath, serverCommonteamPlugin);
+			
+			String domainCommonPath = "E:\\jfq\\code\\V520_for_deploy\\domain_common";
+			TeamPluginDO domainCommonTeamPlugin = new TeamPluginDO("http://192.168.1.47/svn/product/dev/04_code/server/branches/V520_for_deploy/domain_common", "kangduo", "kd_8855");
+			PatchProjectInfoDTO domainCommonProject = new PatchProjectInfoDTO(domainCommonPath, domainCommonTeamPlugin);
+			
+			String commbusiApiPath = "E:\\jfq\\code\\V520_for_deploy\\commbusi_api";
+			TeamPluginDO commbusiApiTeamPlugin = new TeamPluginDO("http://192.168.1.47/svn/product/dev/04_code/server/branches/V520_for_deploy/commbusi_api", "kangduo", "kd_8855");
+			PatchProjectInfoDTO commbusiApiProject = new PatchProjectInfoDTO(commbusiApiPath, commbusiApiTeamPlugin);
+			
+			dependencyProjectList.add(serverCommonProject);
+			dependencyProjectList.add(domainCommonProject);
+			dependencyProjectList.add(commbusiApiProject);
+		}
+		
+		PatchProjectDTO patchProject = new PatchProjectDTO(mainProject, dependencyProjectList);
+		setting.setPatchProject(patchProject);
 	}
 	
 	public void fixLogTextArea() {

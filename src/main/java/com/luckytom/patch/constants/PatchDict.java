@@ -27,6 +27,11 @@ public final class PatchDict {
 		public static final String APP = "icons/patch.jpg";
 	}
 
+	public static final class ArchiveType{
+		public static final String JAR = "jar";
+		public static final String WAR = "war";
+	}
+	
 	public static final class ProjectInfo {
 		public static final String LIB = "lib";
 		public static final String JAVA = "java";
@@ -38,8 +43,8 @@ public final class PatchDict {
 		public static final String RESOURCE = "resource";
 		public static final String SRC_MAIN_WEBAPP = "src" + File.separator + "main" + File.separator + WEB_APP + File.separator;
 		public static final String WEB_INFO_CLASSES = PatchDict.ProjectInfo.WEB_INFO + File.separator + PatchDict.ProjectInfo.CLASSES + File.separator;
-		public static final String SRC_MAIN_RESOURCE = "src" + File.separator + "main" + RESOURCE + File.separator;
-		public static final String SRC_MAIN_JAVA = "src" + File.separator + "main" + JAVA + File.separator;
+		public static final String SRC_MAIN_RESOURCE = "src" + File.separator + "main" + File.separator  + RESOURCE + File.separator;
+		public static final String SRC_MAIN_JAVA = "src" + File.separator + "main" + File.separator + JAVA + File.separator;
 	}
 
 }

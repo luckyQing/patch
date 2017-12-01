@@ -31,11 +31,13 @@ public final class PatchUtil {
 	 */
 	public static boolean dealDependencyProjectList(List<PatchProjectInfoDTO> dependencyProjectList, SVNLogFilterParam svnLogFilterParam) {
 		boolean isUpdate = false;
-		for (PatchProjectInfoDTO dependencyProject : dependencyProjectList) {
-			List<String> dependencyProjectFileList = SvnPatchUtil.getPatchList(dependencyProject.getTeamPlugin(), svnLogFilterParam);
-			if (null != dependencyProjectFileList && dependencyProjectFileList.size() > 0) {
-				isUpdate = true;
-				dependencyProject.setUpdate(isUpdate);
+		if(null!=dependencyProjectList) {
+			for (PatchProjectInfoDTO dependencyProject : dependencyProjectList) {
+				List<String> dependencyProjectFileList = SvnPatchUtil.getPatchList(dependencyProject.getTeamPlugin(), svnLogFilterParam);
+				if (null != dependencyProjectFileList && dependencyProjectFileList.size() > 0) {
+					isUpdate = true;
+					dependencyProject.setUpdate(isUpdate);
+				}
 			}
 		}
 		return isUpdate;
@@ -43,12 +45,17 @@ public final class PatchUtil {
 
 	public static void generatePatch(List<String> updateFileList, TeamPluginDO pomTeamPlugin, PatchProjectDTO patchProject, String patchDir, String tmpUnWarDirUrl) {
 		if (null != updateFileList && updateFileList.size() > 0) {
-			List<PatchProjectInfoDTO> dependencyProjectList = patchProject.getDependencyProjectList();
 			PatchProjectInfoDTO mainProject = patchProject.getMainProject();
 			String packagingName = mainProject.getPackageDTO().getPackagingName();
 			String compileMainProjectPath = tmpUnWarDirUrl +File.separator + packagingName;
+			// 0、delete old files
+			FileUtil.deleteDirFiles(patchDir);
 			// 1、main project
 			// 1.1 main/java
+			System.err.println("packagingName="+packagingName);
+			System.err.println("compileMainProjectPath="+compileMainProjectPath);
+			System.err.println("patchDir="+patchDir);
+			
 			dealJavaFiles(packagingName, compileMainProjectPath, patchDir, updateFileList);
 			// 1.2 main/recource
 			dealResource(packagingName, compileMainProjectPath, patchDir, updateFileList);
@@ -58,8 +65,13 @@ public final class PatchUtil {
 			dealPOM(updateFileList, pomTeamPlugin, compileMainProjectPath, patchDir);
 			
 			// 2、dependency project
-			for (PatchProjectInfoDTO dependencyProject : dependencyProjectList) {
-				FileUtil.copyDependencyProject(dependencyProject, patchDir, packagingName);
+			List<PatchProjectInfoDTO> dependencyProjectList = patchProject.getDependencyProjectList();
+			if (null != dependencyProjectList) {
+				for (PatchProjectInfoDTO dependencyProject : dependencyProjectList) {
+					if(dependencyProject.isUpdate()) {
+						FileUtil.copyDependencyProject(compileMainProjectPath, patchDir, dependencyProject.getPackageDTO());
+					}
+				}
 			}
 		}
 	}
@@ -96,7 +108,6 @@ public final class PatchUtil {
 		String packagingName = FileUtil.getProjectName(mainProjectPath);
 		boolean isUpdate = isUpdatePOM(packagingName, updateFileList);
 		if (isUpdate) {
-			FileUtil.copyPOM(mainProjectPath, packagingName, patchDir);
 			dealPOMJar(pomTeamPlugin, mainProjectPath, patchDir);
 		}
 	}
@@ -206,12 +217,9 @@ public final class PatchUtil {
 			String svnUrl = updateFileIterable.next();
 			if (svnUrl.contains(key)) {
 				String packagingFilePath = svnUrl.substring(svnUrl.indexOf(key)+key.length(), svnUrl.length());
-				StringBuilder srcPath = new StringBuilder(PatchDict.StringCapacity.FILE_PATH);
-				srcPath.append(projectPath)
-					   .append(File.separator)
-					   .append(packagingFilePath);
+				String srcPath = FileUtil.getSrcClassesPath(projectPath, null, packagingFilePath);
 				String destPath = FileUtil.getSrcClassesPath(patchDir, packagingName, packagingFilePath);
-				FileUtil.copyFile(srcPath.toString(), destPath);
+				FileUtil.copyFile(srcPath, destPath);
 				break;
 			}
 		}
@@ -227,18 +235,20 @@ public final class PatchUtil {
 	 */
 	private static void dealJavaFiles(String packagingName, String projectPath, String patchDir, List<String> updateFileList) {
 		String key = packagingName+File.separator+PatchDict.ProjectInfo.SRC_MAIN_JAVA;
+		System.err.println("key="+key);
 		Iterator<String> updateFileIterable = updateFileList.iterator();
 		while (updateFileIterable.hasNext()) {
 			String svnUrl = updateFileIterable.next();
 			if (svnUrl.contains(key)) {
 				String packagingFilePath = svnUrl.substring(svnUrl.indexOf(key)+key.length(), svnUrl.length());
+				System.err.println("packagingFilePath="+packagingFilePath);
 				String srcPath = StringUtils.EMPTY;
 				if(packagingFilePath.endsWith(PatchDict.ProjectInfo.DOT_JAVA)) {
 					packagingFilePath = packagingFilePath.replace(PatchDict.ProjectInfo.DOT_JAVA, PatchDict.ProjectInfo.DOT_CLASS);
-					srcPath = projectPath + File.separator +packagingFilePath;
+					srcPath = FileUtil.getSrcClassesPath(projectPath, null, packagingFilePath);
 					dealInnerClass(srcPath, packagingName, patchDir);
 				} else {
-					srcPath = projectPath + File.separator +packagingFilePath;
+					srcPath = FileUtil.getSrcClassesPath(projectPath, null, packagingFilePath);
 				}
 				
 				String destPath = FileUtil.getSrcClassesPath(patchDir, packagingName, packagingFilePath);
@@ -253,9 +263,15 @@ public final class PatchUtil {
 		String srcFileName = srcFile.getName().replace(PatchDict.ProjectInfo.DOT_CLASS, "");
 		String innerClassRegex = srcFileName + "\\$[_A-Za-z][_A-Za-z0-9]{0,}"+PatchDict.ProjectInfo.DOT_CLASS;
 		
+		System.err.println("srcPath="+srcPath);
+		System.err.println("srcFileName="+srcFileName);
+		System.err.println("innerClassRegex="+innerClassRegex);
+		System.err.println("srcFile.getParent()="+srcFile.getParent());
+		
 		File[] srcDirFileList = new File(srcFile.getParent()).listFiles();
 		for(File srcDirFile:srcDirFileList){
 			if(srcDirFile.getName().matches(innerClassRegex)){
+				System.err.println(srcDirFile.getName()+"===>innerClassRegex="+innerClassRegex);
 				String innerClassPath = srcDirFile.getPath();
 				String key = PatchDict.ProjectInfo.WEB_INFO_CLASSES;
 				String packagingFilePath = innerClassPath.substring(innerClassPath.indexOf(key)+key.length());

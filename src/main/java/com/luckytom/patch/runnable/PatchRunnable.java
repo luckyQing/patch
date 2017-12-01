@@ -38,12 +38,14 @@ public class PatchRunnable implements Runnable {
 		if ((null == patchFileList || patchFileList.size() == 0) && !isUpdate) {
 			AlertUtil.showInfoAlert(Strings.NO_PATCH);
 		} else {
+			FileUtil.dealSeparator(patchFileList);
+			
 			// compile project
 			String warPath = MavenUtil.getCompiledProject(patchProject);
 			
 			// unwar
 			String tmpUnWarDirUrl = FileUtil.getTmpDirUrl();
-			FileUtil.unWar(warPath, tmpUnWarDirUrl, tmpUnWarDirUrl);
+			FileUtil.unWar(warPath, tmpUnWarDirUrl, patchProject.getMainProject().getPackageDTO().getPackagingName());
 			
 			// generate patch
 			String pomSvnUrl = POMUtil.getPOMPath(mainTeamPlugin.getServerUrl());
