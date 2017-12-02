@@ -11,7 +11,7 @@ import com.luckytom.patch.util.POMUtil;
 /**
  * maven web环境处理
  *
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月21日 上午11:43:44
  */
 public class MavenWebEnvService {

@@ -2,6 +2,12 @@ package com.luckytom.patch.model;
 
 import org.apache.maven.model.Model;
 
+/**
+ * pom.xml结构
+ *
+ * @author luckytom
+ * @version 1.0 2017年12月2日 下午6:03:00
+ */
 public class ModelDTO {
 	private Model model;
 	private boolean reWrite;

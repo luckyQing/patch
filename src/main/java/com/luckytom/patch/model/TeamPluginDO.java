@@ -3,7 +3,7 @@ package com.luckytom.patch.model;
 /**
  * svn、git等信息
  *
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月5日 上午11:55:26
  */
 public class TeamPluginDO {

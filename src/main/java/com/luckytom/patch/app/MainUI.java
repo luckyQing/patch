@@ -3,7 +3,7 @@ package com.luckytom.patch.app;
 import java.io.IOException;
 import java.net.URL;
 
-import com.luckytom.patch.constants.Constants;
+import com.luckytom.patch.constants.Resource;
 import com.luckytom.patch.controller.MainUIController;
 
 import javafx.application.Application;
@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 /**
  * 启动类
  *
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月5日 上午11:54:54
  */
 public class MainUI extends Application {
@@ -23,17 +23,17 @@ public class MainUI extends Application {
 	@Override
 	public void start(Stage primaryStage) throws IOException {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		URL mainUIUrl = classLoader.getResource(Constants.Fxml.MAIN_UI);
+		URL mainUIUrl = classLoader.getResource(Resource.Fxml.MAIN_UI);
 		FXMLLoader fxmlLoader = new FXMLLoader(mainUIUrl);
 		
 		Scene scene = new Scene(fxmlLoader.load());
-		URL mainCssUrl = classLoader.getResource(Constants.Css.MAIN_UI);
+		URL mainCssUrl = classLoader.getResource(Resource.Css.MAIN_UI);
 		scene.getStylesheets().add(mainCssUrl.toExternalForm());
 		
 		primaryStage.setResizable(true);
-		primaryStage.setTitle(Constants.APP_NAME);
+		primaryStage.setTitle(Resource.APP_NAME);
 		
-		URL appIconUrl = classLoader.getResource(Constants.Icon.APP);
+		URL appIconUrl = classLoader.getResource(Resource.Icon.APP);
 		primaryStage.getIcons().add(new Image(appIconUrl.toExternalForm()));
 		primaryStage.setScene(scene);
 		primaryStage.show();

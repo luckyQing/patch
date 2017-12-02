@@ -3,6 +3,12 @@ package com.luckytom.patch.util;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
 
+/**
+ * 弹框工具类
+ *
+ * @author luckytom
+ * @version 1.0 2017年12月2日 下午6:03:58
+ */
 public final class AlertUtil {
 
 	public static void showInfoAlert(String message) {

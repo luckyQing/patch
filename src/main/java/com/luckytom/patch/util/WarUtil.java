@@ -19,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * war文件工具类
  * 
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月29日 下午3:30:58
  */
 public final class WarUtil {
@@ -30,8 +30,7 @@ public final class WarUtil {
 	 * @param warPath
 	 * @param unWarPath
 	 */
-	public static boolean unWar(String warPath, String unWarPath) {
-		boolean opState = true;
+	public static void unWar(String warPath, String unWarPath) {
 		File warFile = new File(warPath);
 		try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(warFile));
 				ArchiveInputStream archiveInputStream = new ArchiveStreamFactory().createArchiveInputStream(ArchiveStreamFactory.JAR, bufferedInputStream);) {
@@ -43,23 +42,17 @@ public final class WarUtil {
 					try (OutputStream out = FileUtils.openOutputStream(new File(unWarPath, entry.getName()));) {
 						IOUtils.copy(archiveInputStream, out);
 					} catch (IOException e) {
-						opState = false;
 						logger.error(e.getMessage(), e);
 					}
 				}
 			}
 		} catch (FileNotFoundException e) {
-			opState = false;
 			logger.error(e.getMessage(), e);
 		} catch (IOException e) {
-			opState = false;
 			logger.error(e.getMessage(), e);
 		} catch (ArchiveException e) {
-			opState = false;
 			logger.error(e.getMessage(), e);
 		}
-		
-		return opState;
 	}
 	
 }

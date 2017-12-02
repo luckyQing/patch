@@ -29,6 +29,12 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
+/**
+ * ui类
+ *
+ * @author luckytom
+ * @version 1.0 2017年12月2日 下午6:02:45
+ */
 public class MainUIController implements Initializable {
 
 	@FXML

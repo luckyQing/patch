@@ -17,7 +17,7 @@ import com.luckytom.patch.model.PackageDTO;
 /**
  * 文件操作工具类
  * 
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月29日 上午11:20:03
  */
 public final class FileUtil {
@@ -44,27 +44,6 @@ public final class FileUtil {
 				replaceSeparator(pathList, "\\");
 			} else {
 				replaceSeparator(pathList, "/");
-			}
-		}
-	}
-	
-	/**
-	 * 删除文件夹下面的所有文件
-	 * 
-	 * @param patchDir
-	 */
-	public static void deleteDirFiles(String patchDir) {
-		File patchDirFile = new File(patchDir);
-		if (patchDirFile.exists()) {
-			File[] files = patchDirFile.listFiles();
-			if (null != files && files.length > 0) {
-				try {
-					for (File file : files) {
-						FileUtils.forceDelete(file);
-					}
-				} catch (IOException e) {
-					logger.error(e.getMessage(), e);
-				}
 			}
 		}
 	}
@@ -113,7 +92,7 @@ public final class FileUtil {
 	 * @return
 	 */
 	public static String getCompileJarPath(String projectPath, String compileJarName) {
-		StringBuilder compiledProjectPath = new StringBuilder(100);
+		StringBuilder compiledProjectPath = new StringBuilder(Constants.StringCapacity.FILE_PATH);
 		compiledProjectPath.append(projectPath);
 		if (!FileUtil.hasSeparator(projectPath)) {
 			compiledProjectPath.append(File.separator);
@@ -131,8 +110,9 @@ public final class FileUtil {
 	 * @return
 	 */
 	public static String getSrcClassesPath(String patchDir, String packagingName, String packagingFilePath){
-		StringBuilder path = new StringBuilder(patchDir);
-		path.append(File.separator);
+		StringBuilder path = new StringBuilder(Constants.StringCapacity.FILE_PATH);
+		path.append(patchDir)
+			.append(File.separator);
 		if(StringUtils.isNotBlank(packagingName)) {
 			path.append(packagingName)
 				.append(File.separator);
@@ -165,7 +145,8 @@ public final class FileUtil {
 	 */
 	public static boolean copyDependencyProject(String compileMainProjectPath, String destFileDir, PackageDTO dependencyPackage) {
 		String mainProjectName = FileUtil.getProjectName(compileMainProjectPath);
-		StringBuilder srcFilePath = new StringBuilder(compileMainProjectPath);
+		StringBuilder srcFilePath = new StringBuilder(Constants.StringCapacity.FILE_PATH);
+		srcFilePath.append(compileMainProjectPath);
 		if (!hasSeparator(destFileDir)) {
 			srcFilePath.append(File.separator);
 		}
@@ -174,7 +155,8 @@ public final class FileUtil {
 				   .append(File.separator)
 				   .append(Constants.ProjectInfo.LIB).append(File.separator).append(dependencyPackage.getCompileJarName());
 		
-		StringBuilder destFilePath = new StringBuilder(destFileDir);
+		StringBuilder destFilePath = new StringBuilder(Constants.StringCapacity.FILE_PATH);
+		destFilePath.append(destFileDir);
 		if (!hasSeparator(destFileDir)) {
 			destFilePath.append(File.separator);
 		}
@@ -189,36 +171,38 @@ public final class FileUtil {
 	}
 	
 	/**
+	 * 删除文件夹及其下面的所有文件
+	 * 
+	 * @param dirUrl
+	 * @return
+	 */
+	public static boolean deleteDir(String dirUrl) {
+		boolean opState = true;
+		try {
+			FileUtils.deleteDirectory(new File(dirUrl));
+		} catch (IOException e) {
+			opState = false;
+			logger.error(e.getMessage(), e);
+		}
+		return opState;
+	}
+	
+	/**
 	 * 解压war
 	 * 
 	 * @param warPath
 	 * @param patchPath
 	 * @param mainProjectName
 	 */
-	public static boolean unWar(String warPath, String unWarDir, String mainProjectName) {
-		StringBuilder unWarPath = new StringBuilder(unWarDir);
+	public static void unWar(String warPath, String unWarDir, String mainProjectName) {
+		StringBuilder unWarPath = new StringBuilder(Constants.StringCapacity.FILE_PATH);
+		unWarPath.append(unWarDir);
 		if(!FileUtil.hasSeparator(unWarDir)) {
 			unWarPath.append(File.separator);
 		}
 		unWarPath.append(mainProjectName);
-		return WarUtil.unWar(warPath, unWarPath.toString());
-	}
-	
-	/**
-	 * 删除临时文件夹
-	 * 
-	 * @param tmpDirUrl
-	 * @return
-	 */
-	public static boolean deleteTmpDir(String tmpDirUrl) {
-		boolean opState = true;
-		try {
-			FileUtils.deleteDirectory(new File(tmpDirUrl));
-		} catch (IOException e) {
-			opState = false;
-			logger.error(e.getMessage(), e);
-		}
-		return opState;
+		
+		WarUtil.unWar(warPath, unWarPath.toString());
 	}
 	
 	public static String getCompileJarName(String name, String version, String packagingType) {
@@ -229,10 +213,4 @@ public final class FileUtil {
 		return name + "." + packagingType;
 	}
 	
-	public static String appendChildDir(String path, String childDir) {
-		if (hasSeparator(path)) {
-			return path + childDir;
-		}
-		return path + File.separator + childDir;
-	}
 }

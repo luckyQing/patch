@@ -1,12 +1,27 @@
 package com.luckytom.patch.constants;
 
 /**
- * 字符串
+ * 资源类
  *
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月30日 下午11:32:54
  */
-public final class Strings {
+public final class Resource {
+
+	public static final String APP_NAME = "Web项目（maven）增量包工具";
+	
+	public static final class Css {
+		public static final String MAIN_UI = "css/main_ui.css";
+	}
+
+	public static final class Fxml {
+		public static final String MAIN_UI = "fxml/main_ui.fxml";
+	}
+
+	public static final class Icon {
+		public static final String APP = "icons/patch.jpg";
+	}
+	
 	public static final String SVN_LOG_DETAIL = "版本号：%s ==>作者：%s ==>提交时间：%s ==>备注：%s";
 	public static final String SNV_OPERATION_LOG = "====>%s：%s";
 	
@@ -28,4 +43,8 @@ public final class Strings {
 	public static final String NO_PATCH = "无更新文件，无补丁包可生成！";
 	
 	public static final String PATCH_PATH = "%s补丁生成路径======>%s";
+	
+	public static final String MAVEN_NO_SETTING = "maven环境变量未设置！"; 
+	public static final String JDK_NO_SETTING = "jdk环境变量未设置！"; 
+	public static final String JDK_BELOW_VERSION8 = "请在jdk%s以上执行！"; 
 }

@@ -5,7 +5,7 @@ import com.luckytom.patch.util.FileUtil;
 /**
  * 补丁工程信息
  * 
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月29日 上午11:06:35
  */
 public class PatchProjectInfoDTO {

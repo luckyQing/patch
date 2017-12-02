@@ -6,7 +6,7 @@ import com.luckytom.patch.util.FileUtil;
 /**
  * web项目信息
  * 
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月23日 上午9:57:01
  */
 public class PackageDTO {

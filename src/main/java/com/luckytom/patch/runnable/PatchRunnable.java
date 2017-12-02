@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.luckytom.patch.constants.Strings;
+import com.luckytom.patch.constants.Resource;
 import com.luckytom.patch.model.PatchProjectDTO;
 import com.luckytom.patch.model.SettingDO;
 import com.luckytom.patch.model.TeamPluginDO;
@@ -19,7 +19,7 @@ import com.luckytom.patch.util.SvnPatchUtil;
 /**
  * 增量包runnable
  * 
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月23日 上午11:22:07
  */
 public class PatchRunnable implements Runnable {
@@ -39,7 +39,7 @@ public class PatchRunnable implements Runnable {
 		TeamPluginDO mainTeamPlugin = patchProject.getMainProject().getTeamPlugin();
 		List<String> patchFileList = SvnPatchUtil.getPatchList(mainTeamPlugin, setting.getSvnLogFilterParam());
 		if ((null == patchFileList || patchFileList.size() == 0) && !isUpdate) {
-			AlertUtil.showInfoAlert(Strings.NO_PATCH);
+			AlertUtil.showInfoAlert(Resource.NO_PATCH);
 		} else {
 			FileUtil.dealSeparator(patchFileList);
 			
@@ -56,11 +56,11 @@ public class PatchRunnable implements Runnable {
 			PatchUtil.generatePatch(patchFileList, pomTeamPlugin, patchProject, setting.getPatchPath(), tmpUnWarDirUrl);
 			
 			String compileJarName = patchProject.getMainProject().getPackageDTO().getCompileJarName();
-			String patchPath = String.format(Strings.PATCH_PATH, compileJarName, setting.getPatchPath());
+			String patchPath = String.format(Resource.PATCH_PATH, compileJarName, setting.getPatchPath());
 			logger.info(patchPath);
 			
 			// delete temp file dir
-			FileUtil.deleteTmpDir(tmpUnWarDirUrl);
+			FileUtil.deleteDir(tmpUnWarDirUrl);
 		}
 		SvnPatchUtil.disposeAllSvnOperationFactory();
 	}

@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 /**
  * 日期工具类
  * 
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月29日 上午10:19:07
  */
 public class DateUtil {

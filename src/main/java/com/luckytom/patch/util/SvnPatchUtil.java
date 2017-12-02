@@ -27,14 +27,14 @@ import org.tmatesoft.svn.core.wc2.SvnOperationFactory;
 import org.tmatesoft.svn.core.wc2.SvnRevisionRange;
 import org.tmatesoft.svn.core.wc2.SvnTarget;
 
-import com.luckytom.patch.constants.Strings;
+import com.luckytom.patch.constants.Resource;
 import com.luckytom.patch.model.SVNLogFilterParam;
 import com.luckytom.patch.model.TeamPluginDO;
 
 /**
  * svn工具类
  * 
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月29日 上午10:23:31
  */
 public final class SvnPatchUtil {
@@ -43,10 +43,10 @@ public final class SvnPatchUtil {
 	private static Map<Character, String> fileChangeTypeMap;
 	static {
 		fileChangeTypeMap = new HashMap<Character, String>(4);
-		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_ADDED, Strings.TYPE_ADDED);
-		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_MODIFIED, Strings.TYPE_MODIFIED);
-		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_DELETED, Strings.TYPE_DELETED);
-		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_REPLACED, Strings.TYPE_REPLACED);
+		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_ADDED, Resource.TYPE_ADDED);
+		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_MODIFIED, Resource.TYPE_MODIFIED);
+		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_DELETED, Resource.TYPE_DELETED);
+		fileChangeTypeMap.put(SVNLogEntryPath.TYPE_REPLACED, Resource.TYPE_REPLACED);
 		
 		initSvn();
 	}
@@ -152,7 +152,7 @@ public final class SvnPatchUtil {
 			if (StringUtils.isNotBlank(author) && !author.equals(svnLogEntry.getAuthor())) {
 				continue;
 			} 
-			String subLog = String.format(Strings.SVN_LOG_DETAIL, 
+			String subLog = String.format(Resource.SVN_LOG_DETAIL, 
 					  svnLogEntry.getRevision(),
 					  svnLogEntry.getAuthor(), 
 					  DateUtil.SDF_YYYYMMDDHHMMSS.get().format(svnLogEntry.getDate()), 
@@ -162,7 +162,7 @@ public final class SvnPatchUtil {
 			Map<String, SVNLogEntryPath> changedPathsMap = svnLogEntry.getChangedPaths();
 			if (changedPathsMap.size() > 0) {
 				for (Map.Entry<String, SVNLogEntryPath> entry : changedPathsMap.entrySet()) {
-					String logDetail = String.format(Strings.SNV_OPERATION_LOG,
+					String logDetail = String.format(Resource.SNV_OPERATION_LOG,
 													 fileChangeTypeMap.get(entry.getValue().getType()), 
 													 entry.getKey());
 					logger.info(logDetail);
@@ -216,7 +216,7 @@ public final class SvnPatchUtil {
 	}
 	
 	private static void exportFile(SvnOperationFactory svnOperationFactory, long version, SvnTarget source, String localUrl){
-		logger.info(String.format(Strings.EXPORT_FILE_START, localUrl));
+		logger.info(String.format(Resource.EXPORT_FILE_START, localUrl));
 		SvnExport  svnExport = svnOperationFactory.createExport();
 		svnExport.addTarget(SvnTarget.fromFile(new File(localUrl)));
 		svnExport.setRevision(SVNRevision.create(version));
@@ -228,7 +228,7 @@ public final class SvnPatchUtil {
 		} catch (SVNException e) {
 			logger.error(e.getMessage(), e);
 		}
-		logger.info(String.format(Strings.EXPORT_FILE_END, localUrl)); 
+		logger.info(String.format(Resource.EXPORT_FILE_END, localUrl)); 
 	}
 
 }

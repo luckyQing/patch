@@ -5,26 +5,15 @@ import java.io.File;
 /**
  * 常量类
  *
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月5日 上午11:54:36
  */
 public final class Constants {
-	public static final String APP_NAME = "Web项目（maven）增量包工具";
+	/**运行时要求的jdk版本*/
+	public static final String REQUIRED_JDK_VERSION = "1.8";
 	
 	public static final class StringCapacity{
 		public static final int FILE_PATH = 100;
-	}
-
-	public static final class Css {
-		public static final String MAIN_UI = "css/main_ui.css";
-	}
-
-	public static final class Fxml {
-		public static final String MAIN_UI = "fxml/main_ui.fxml";
-	}
-
-	public static final class Icon {
-		public static final String APP = "icons/patch.jpg";
 	}
 
 	public static final class ArchiveType{

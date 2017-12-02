@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * console命令行执行工具类
  *
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月20日 下午9:54:00
  */
 public final class CmdUtil {

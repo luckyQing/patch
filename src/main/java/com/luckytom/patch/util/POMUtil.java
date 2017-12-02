@@ -19,7 +19,7 @@ import com.luckytom.patch.model.PackageDTO;
 /**
  * pom.xml工具类
  * 
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月23日 上午10:10:57
  */
 public class POMUtil {

@@ -5,6 +5,12 @@ import com.luckytom.patch.runnable.LogRunnable;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 
+/**
+ * ui控制台日志输出工具类
+ *
+ * @author luckytom
+ * @version 1.0 2017年12月2日 下午6:04:35
+ */
 public final class ConsoleUtil {
 	private static TextArea mLogTextArea;
 	private static boolean mLogSwitch = true;

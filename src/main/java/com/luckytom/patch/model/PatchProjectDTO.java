@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * 补丁相关工程
  * 
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月29日 上午10:49:07
  */
 public class PatchProjectDTO {

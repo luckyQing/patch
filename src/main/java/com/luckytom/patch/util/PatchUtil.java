@@ -17,7 +17,7 @@ import com.luckytom.patch.model.TeamPluginDO;
 /**
  * 应用工具类
  * 
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月23日 上午9:33:35
  */
 public final class PatchUtil {
@@ -49,7 +49,7 @@ public final class PatchUtil {
 			String packagingName = mainProject.getPackageDTO().getPackagingName();
 			String compileMainProjectPath = tmpUnWarDirUrl +File.separator + packagingName;
 			// 0、delete old files
-			FileUtil.deleteDirFiles(patchDir);
+			FileUtil.deleteDir(patchDir);
 			// 1、main project
 			// 1.1 main/java
 			System.err.println("packagingName="+packagingName);
@@ -165,8 +165,8 @@ public final class PatchUtil {
 					FileUtil.copyFile(jarPath.toString(), destPath.toString());
 				}
 			}
-			
 		}
+		FileUtil.deleteDir(saveUrl);
 	}
 	
 	/**

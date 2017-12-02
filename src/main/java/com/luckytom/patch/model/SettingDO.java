@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * 配置信息
  *
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月5日 上午11:55:15
  */
 public class SettingDO {

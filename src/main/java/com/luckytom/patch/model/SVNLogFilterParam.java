@@ -3,7 +3,7 @@ package com.luckytom.patch.model;
 /**
  * svn日志过滤参数
  * 
- * @author liyulin
+ * @author luckytom
  * @version 1.0 2017年11月28日 下午6:22:05
  */
 public class SVNLogFilterParam {
