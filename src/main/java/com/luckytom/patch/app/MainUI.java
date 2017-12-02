@@ -5,6 +5,7 @@ import java.net.URL;
 
 import com.luckytom.patch.constants.Resource;
 import com.luckytom.patch.controller.MainUIController;
+import com.luckytom.patch.util.SvnPatchUtil;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,10 @@ import javafx.stage.Stage;
  * @version 1.0 2017年11月5日 上午11:54:54
  */
 public class MainUI extends Application {
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
 	
 	@Override
 	public void start(Stage primaryStage) throws IOException {
@@ -41,8 +46,13 @@ public class MainUI extends Application {
 		MainUIController controller = fxmlLoader.getController();
 		controller.setPrimaryStage(primaryStage);
 	}
-
-	public static void main(String[] args) {
-		launch(args);
+	
+	@Override
+	public void stop() throws Exception {
+		super.stop();
+		
+		SvnPatchUtil.disposeAllSvnOperationFactory();
+		System.exit(0);
 	}
+	
 }

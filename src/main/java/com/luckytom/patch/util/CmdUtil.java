@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
  * @version 1.0 2017年11月20日 下午9:54:00
  */
 public final class CmdUtil {
+	
 	private static final Logger logger = LogManager.getFormatterLogger();
 	public static String systemEncoding;
 

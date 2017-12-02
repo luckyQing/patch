@@ -21,6 +21,7 @@ import com.luckytom.patch.model.PackageDTO;
  * @version 1.0 2017年11月29日 上午11:20:03
  */
 public final class FileUtil {
+	
 	private static final Logger logger = LogManager.getFormatterLogger();
 
 	public static boolean hasSeparator(String path) {

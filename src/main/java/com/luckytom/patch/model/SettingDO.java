@@ -1,5 +1,6 @@
 package com.luckytom.patch.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -8,7 +9,9 @@ import java.util.List;
  * @author luckytom
  * @version 1.0 2017年11月5日 上午11:55:15
  */
-public class SettingDO {
+public class SettingDO implements Serializable {
+	
+	private static final long serialVersionUID = -8514517532101610157L;
 	/** 控制台日志开关 */
 	private boolean logSwitch;
 	/** 补丁生成路径 */

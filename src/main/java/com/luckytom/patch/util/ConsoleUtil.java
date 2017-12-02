@@ -12,6 +12,7 @@ import javafx.scene.control.TextArea;
  * @version 1.0 2017年12月2日 下午6:04:35
  */
 public final class ConsoleUtil {
+	
 	private static TextArea mLogTextArea;
 	private static boolean mLogSwitch = true;
 

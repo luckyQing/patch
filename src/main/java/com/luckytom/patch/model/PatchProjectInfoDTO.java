@@ -1,5 +1,7 @@
 package com.luckytom.patch.model;
 
+import java.io.Serializable;
+
 import com.luckytom.patch.util.FileUtil;
 
 /**
@@ -8,7 +10,9 @@ import com.luckytom.patch.util.FileUtil;
  * @author luckytom
  * @version 1.0 2017年11月29日 上午11:06:35
  */
-public class PatchProjectInfoDTO {
+public class PatchProjectInfoDTO implements Serializable {
+	
+	private static final long serialVersionUID = 2376283612015654342L;
 	/** 工程路径 */
 	private String path;
 	/** 是否有修改 */

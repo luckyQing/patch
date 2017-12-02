@@ -9,6 +9,7 @@ import java.io.File;
  * @version 1.0 2017年11月5日 上午11:54:36
  */
 public final class Constants {
+	
 	/**运行时要求的jdk版本*/
 	public static final String REQUIRED_JDK_VERSION = "1.8";
 	

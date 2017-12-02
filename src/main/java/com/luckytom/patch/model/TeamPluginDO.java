@@ -1,12 +1,16 @@
 package com.luckytom.patch.model;
 
+import java.io.Serializable;
+
 /**
  * svn、git等信息
  *
  * @author luckytom
  * @version 1.0 2017年11月5日 上午11:55:26
  */
-public class TeamPluginDO {
+public class TeamPluginDO implements Serializable {
+	
+	private static final long serialVersionUID = 2909126208224192938L;
 	private String serverUrl;
 	private String username;
 	private String password;

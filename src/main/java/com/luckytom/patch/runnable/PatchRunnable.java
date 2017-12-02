@@ -23,6 +23,7 @@ import com.luckytom.patch.util.SvnPatchUtil;
  * @version 1.0 2017年11月23日 上午11:22:07
  */
 public class PatchRunnable implements Runnable {
+	
 	private static final Logger logger = LogManager.getFormatterLogger();
 	private SettingDO setting;
 
@@ -62,7 +63,6 @@ public class PatchRunnable implements Runnable {
 			// delete temp file dir
 			FileUtil.deleteDir(tmpUnWarDirUrl);
 		}
-		SvnPatchUtil.disposeAllSvnOperationFactory();
 	}
 
 }

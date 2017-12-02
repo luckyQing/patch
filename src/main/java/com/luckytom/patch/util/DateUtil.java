@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
  * @author luckytom
  * @version 1.0 2017年11月29日 上午10:19:07
  */
-public class DateUtil {
+public final class DateUtil {
 	
 	public static final ThreadLocal<DateFormat> SDF_YYYYMMDDHHMMSS = new ThreadLocal<DateFormat>() {
 		@Override

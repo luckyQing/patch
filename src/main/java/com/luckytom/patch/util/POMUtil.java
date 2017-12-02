@@ -22,7 +22,8 @@ import com.luckytom.patch.model.PackageDTO;
  * @author luckytom
  * @version 1.0 2017年11月23日 上午10:10:57
  */
-public class POMUtil {
+public final class POMUtil {
+	
 	private static final Logger logger = LogManager.getFormatterLogger();
 	
 	/**

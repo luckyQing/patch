@@ -10,6 +10,7 @@ import com.luckytom.patch.util.FileUtil;
  * @version 1.0 2017年11月23日 上午9:57:01
  */
 public class PackageDTO {
+
 	private String packagingName;
 	private String version;
 	private String packagingType;
@@ -52,14 +53,13 @@ public class PackageDTO {
 
 	public String getCompileJarName() {
 		if (null == compileJarName) {
-			if(Constants.ArchiveType.JAR.equals(packagingType)) {
+			if (Constants.ArchiveType.JAR.equals(packagingType)) {
 				compileJarName = FileUtil.getCompileJarName(packagingName, version, packagingType);
-			} else if(Constants.ArchiveType.WAR.equals(packagingType)) {
+			} else if (Constants.ArchiveType.WAR.equals(packagingType)) {
 				compileJarName = FileUtil.getCompileWarName(packagingName, packagingType);
 			}
 		}
 		return compileJarName;
 	}
-	
-	
+
 }

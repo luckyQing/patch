@@ -15,6 +15,7 @@ import com.luckytom.patch.util.MavenUtil;
  * @version 1.0 2017年11月23日 上午9:42:03
  */
 public class PatchService {
+	
 	private static final Logger logger = LogManager.getFormatterLogger();
 	
 	public static void generatePatch(SettingDO setting) {

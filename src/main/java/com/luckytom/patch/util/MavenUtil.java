@@ -22,6 +22,7 @@ import com.luckytom.patch.service.MavenWebEnvService;
  * @version 1.0 2017年11月21日 上午10:27:06
  */
 public final class MavenUtil {
+	
 	private static final Logger logger = LogManager.getFormatterLogger();
 	/** cpu内核数 */
 	public static final int CPU_CORE_NUM = Runtime.getRuntime().availableProcessors();

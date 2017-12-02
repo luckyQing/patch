@@ -23,6 +23,7 @@ import org.apache.logging.log4j.Logger;
  * @version 1.0 2017年11月29日 下午3:30:58
  */
 public final class WarUtil {
+	
 	private static final Logger logger = LogManager.getFormatterLogger();
 	
 	/**

@@ -1,12 +1,16 @@
 package com.luckytom.patch.model;
 
+import java.io.Serializable;
+
 /**
  * svn日志过滤参数
  * 
  * @author luckytom
  * @version 1.0 2017年11月28日 下午6:22:05
  */
-public class SVNLogFilterParam {
+public class SVNLogFilterParam implements Serializable {
+	
+	private static final long serialVersionUID = -8036131933534417022L;
 	/** 提交开始时间 */
 	private String startTime;
 	/** 提交截止时间 */
