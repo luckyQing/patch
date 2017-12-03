@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 
 import com.luckytom.patch.model.PatchProjectDTO;
 import com.luckytom.patch.model.PatchProjectInfoDTO;
-import com.luckytom.patch.model.SVNLogFilterParam;
+import com.luckytom.patch.model.LogFilterParam;
 import com.luckytom.patch.model.SettingDO;
 import com.luckytom.patch.model.TeamPluginDO;
 import com.luckytom.patch.model.TeamPluginType;
@@ -62,7 +62,6 @@ public class MainUIController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		fixLogTextArea();
 		ConsoleUtil.setLogTextArea(logTextArea);
 
 		ObservableList<String> teamPluginTypeObservableList = FXCollections.observableArrayList(TeamPluginType.getTeamPluginTypes());
@@ -81,8 +80,8 @@ public class MainUIController implements Initializable {
 		String endTime = "2017-12-01 13:00:00";
 		String author = "yanghua";;
 
-		SVNLogFilterParam svnLogFilterParam = new SVNLogFilterParam(startTime, endTime, author);
-		setting.setSvnLogFilterParam(svnLogFilterParam);
+		LogFilterParam logFilterParam = new LogFilterParam(startTime, endTime, author);
+		setting.setLogFilterParam(logFilterParam);
 		
 		String mainPath = "E:\\jfq\\code\\V520_for_deploy\\API";
 		TeamPluginDO teamPlugin = new TeamPluginDO("http://192.168.1.47/svn/product/dev/04_code/server/branches/V520_for_deploy/API", "kangduo", "kd_8855");
@@ -109,10 +108,6 @@ public class MainUIController implements Initializable {
 		
 		PatchProjectDTO patchProject = new PatchProjectDTO(mainProject, dependencyProjectList);
 		setting.setPatchProject(patchProject);
-	}
-	
-	public void fixLogTextArea() {
-		
 	}
 
 	public void setPrimaryStage(Stage primaryStage) {
@@ -171,10 +166,9 @@ public class MainUIController implements Initializable {
 //
 //		SVNLogFilterParam svnLogFilterParam = new SVNLogFilterParam(startTime, endTime, author);
 		// TODO:init setting param
-		
 		PatchService.generatePatch(setting);
 	}
-
+	
 	public void onSaveConfig() {
 
 	}

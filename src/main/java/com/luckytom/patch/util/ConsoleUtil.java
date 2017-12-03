@@ -1,6 +1,6 @@
 package com.luckytom.patch.util;
 
-import com.luckytom.patch.runnable.LogRunnable;
+import com.luckytom.patch.runnable.ConsoleRunnable;
 
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
@@ -26,7 +26,7 @@ public final class ConsoleUtil {
 
 	public static void info(String text) {
 		if (mLogSwitch) {
-			Platform.runLater(new LogRunnable(mLogTextArea, text));
+			Platform.runLater(new ConsoleRunnable(mLogTextArea, text));
 		}
 	}
 	

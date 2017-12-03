@@ -5,13 +5,16 @@ import java.net.URL;
 
 import com.luckytom.patch.constants.Resource;
 import com.luckytom.patch.controller.MainUIController;
-import com.luckytom.patch.util.SvnPatchUtil;
+import com.luckytom.patch.service.PatchService;
+import com.luckytom.patch.teamPlugin.util.SvnPatchUtil;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * 启动类
@@ -45,14 +48,16 @@ public class MainUI extends Application {
 		
 		MainUIController controller = fxmlLoader.getController();
 		controller.setPrimaryStage(primaryStage);
-	}
-	
-	@Override
-	public void stop() throws Exception {
-		super.stop();
 		
-		SvnPatchUtil.disposeAllSvnOperationFactory();
-		System.exit(0);
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				SvnPatchUtil.disposeAllSvnOperationFactory();
+				PatchService.shutdownPatchSingleThreadExecutor();
+				
+				System.exit(0);
+			}
+		});
 	}
 	
 }

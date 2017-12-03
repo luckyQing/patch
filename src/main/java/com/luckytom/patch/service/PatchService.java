@@ -1,5 +1,8 @@
 package com.luckytom.patch.service;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,13 +20,19 @@ import com.luckytom.patch.util.MavenUtil;
 public class PatchService {
 	
 	private static final Logger logger = LogManager.getFormatterLogger();
+	private static ExecutorService patchSingleThreadExecutor = Executors.newSingleThreadExecutor();
 	
 	public static void generatePatch(SettingDO setting) {
 		logger.info(Resource.CHECK_ENV);
 		if (MavenUtil.EnvCheck.checkJDKEnv() && MavenUtil.EnvCheck.checkMavenEnv()) {
-			Thread thread = new Thread(new PatchRunnable(setting));
-			thread.setDaemon(true);
-			thread.start();
+			patchSingleThreadExecutor.execute(new PatchRunnable(setting));
+		}
+		
+	}
+	
+	public static void shutdownPatchSingleThreadExecutor() {
+		if (null != patchSingleThreadExecutor && !patchSingleThreadExecutor.isShutdown()) {
+			patchSingleThreadExecutor.shutdown();
 		}
 	}
 	

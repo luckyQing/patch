@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author luckytom
  * @version 1.0 2017年11月28日 下午6:22:05
  */
-public class SVNLogFilterParam implements Serializable {
+public class LogFilterParam implements Serializable {
 	
 	private static final long serialVersionUID = -8036131933534417022L;
 	/** 提交开始时间 */
@@ -18,11 +18,11 @@ public class SVNLogFilterParam implements Serializable {
 	/** 提交作者 */
 	private String author;
 
-	public SVNLogFilterParam() {
+	public LogFilterParam() {
 		super();
 	}
 
-	public SVNLogFilterParam(String startTime, String endTime, String author) {
+	public LogFilterParam(String startTime, String endTime, String author) {
 		super();
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -55,7 +55,7 @@ public class SVNLogFilterParam implements Serializable {
 
 	@Override
 	public String toString() {
-		return "SVNLogFilterParam [startTime=" + startTime + ", endTime=" + endTime + ", author=" + author + "]";
+		return "LogFilterParam [startTime=" + startTime + ", endTime=" + endTime + ", author=" + author + "]";
 	}
 
 }

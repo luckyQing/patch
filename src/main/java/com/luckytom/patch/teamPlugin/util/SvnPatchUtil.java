@@ -1,4 +1,4 @@
-package com.luckytom.patch.util;
+package com.luckytom.patch.teamPlugin.util;
 
 import java.io.File;
 import java.text.ParseException;
@@ -28,8 +28,9 @@ import org.tmatesoft.svn.core.wc2.SvnRevisionRange;
 import org.tmatesoft.svn.core.wc2.SvnTarget;
 
 import com.luckytom.patch.constants.Resource;
-import com.luckytom.patch.model.SVNLogFilterParam;
+import com.luckytom.patch.model.LogFilterParam;
 import com.luckytom.patch.model.TeamPluginDO;
+import com.luckytom.patch.util.DateUtil;
 
 /**
  * svn工具类
@@ -69,10 +70,10 @@ public final class SvnPatchUtil {
 	 * @param svnLogFilterParam
 	 * @return
 	 */
-	public static List<String> getPatchList(TeamPluginDO teamPlugin, SVNLogFilterParam svnLogFilterParam) {
+	public static List<String> getPatchList(TeamPluginDO teamPlugin, LogFilterParam logFilterParam) {
 		SvnOperationFactory svnOperationFactory = getSvnOperationFactory(teamPlugin.getUsername(), teamPlugin.getPassword());
 
-		SvnRevisionRange svnRevisionRange = initSvnRevisionRange(svnLogFilterParam.getStartTime(), svnLogFilterParam.getEndTime());
+		SvnRevisionRange svnRevisionRange = initSvnRevisionRange(logFilterParam.getStartTime(), logFilterParam.getEndTime());
 		SvnTarget target = null;
 		try {
 			target = SvnTarget.fromURL(SVNURL.parseURIEncoded(teamPlugin.getServerUrl()));
@@ -81,7 +82,7 @@ public final class SvnPatchUtil {
 		}
 		List<SVNLogEntry> svnLogEntryList = getSVNLogEntryList(svnOperationFactory, svnRevisionRange, target, null);
 
-		return getSubmitFileList(svnLogEntryList, svnLogFilterParam.getAuthor());
+		return getSubmitFileList(svnLogEntryList, logFilterParam.getAuthor());
 	}
 
 	private static SvnRevisionRange initSvnRevisionRange(String startTime, String endTime) {

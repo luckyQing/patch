@@ -10,7 +10,7 @@ import java.util.List;
  * @version 1.0 2017年11月5日 上午11:55:15
  */
 public class SettingDO implements Serializable {
-	
+
 	private static final long serialVersionUID = -8514517532101610157L;
 	/** 控制台日志开关 */
 	private boolean logSwitch;
@@ -19,20 +19,20 @@ public class SettingDO implements Serializable {
 	/** 补丁相关工程 */
 	private PatchProjectDTO patchProject;
 	/** svn日志过滤参数 */
-	private SVNLogFilterParam svnLogFilterParam;
+	private LogFilterParam logFilterParam;
 	private List<String> notDealFileList;
 
 	public SettingDO() {
 		super();
 	}
 
-	public SettingDO(boolean logSwitch, String patchPath, PatchProjectDTO patchProject,
-			SVNLogFilterParam svnLogFilterParam, List<String> notDealFileList) {
+	public SettingDO(boolean logSwitch, String patchPath, PatchProjectDTO patchProject, LogFilterParam logFilterParam,
+			List<String> notDealFileList) {
 		super();
 		this.logSwitch = logSwitch;
 		this.patchPath = patchPath;
 		this.patchProject = patchProject;
-		this.svnLogFilterParam = svnLogFilterParam;
+		this.logFilterParam = logFilterParam;
 		this.notDealFileList = notDealFileList;
 	}
 
@@ -60,12 +60,12 @@ public class SettingDO implements Serializable {
 		this.patchProject = patchProject;
 	}
 
-	public SVNLogFilterParam getSvnLogFilterParam() {
-		return svnLogFilterParam;
+	public LogFilterParam getLogFilterParam() {
+		return logFilterParam;
 	}
 
-	public void setSvnLogFilterParam(SVNLogFilterParam svnLogFilterParam) {
-		this.svnLogFilterParam = svnLogFilterParam;
+	public void setLogFilterParam(LogFilterParam logFilterParam) {
+		this.logFilterParam = logFilterParam;
 	}
 
 	public List<String> getNotDealFileList() {
@@ -79,7 +79,7 @@ public class SettingDO implements Serializable {
 	@Override
 	public String toString() {
 		return "SettingDO [logSwitch=" + logSwitch + ", patchPath=" + patchPath + ", patchProject=" + patchProject
-				+ ", svnLogFilterParam=" + svnLogFilterParam + ", notDealFileList=" + notDealFileList + "]";
+				+ ", logFilterParam=" + logFilterParam + ", notDealFileList=" + notDealFileList + "]";
 	}
 
 }

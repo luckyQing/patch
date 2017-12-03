@@ -9,12 +9,12 @@ import com.luckytom.patch.constants.Resource;
 import com.luckytom.patch.model.PatchProjectDTO;
 import com.luckytom.patch.model.SettingDO;
 import com.luckytom.patch.model.TeamPluginDO;
+import com.luckytom.patch.teamPlugin.util.SvnPatchUtil;
 import com.luckytom.patch.util.AlertUtil;
 import com.luckytom.patch.util.FileUtil;
 import com.luckytom.patch.util.MavenUtil;
 import com.luckytom.patch.util.POMUtil;
 import com.luckytom.patch.util.PatchUtil;
-import com.luckytom.patch.util.SvnPatchUtil;
 
 /**
  * 增量包runnable
@@ -35,10 +35,10 @@ public class PatchRunnable implements Runnable {
 	public void run() {
 		// 获取svn、git更新记录
 		PatchProjectDTO patchProject = setting.getPatchProject();
-		boolean isUpdate = PatchUtil.dealDependencyProjectList(patchProject.getDependencyProjectList(), setting.getSvnLogFilterParam());
+		boolean isUpdate = PatchUtil.dealDependencyProjectList(patchProject.getDependencyProjectList(), setting.getLogFilterParam());
 		
 		TeamPluginDO mainTeamPlugin = patchProject.getMainProject().getTeamPlugin();
-		List<String> patchFileList = SvnPatchUtil.getPatchList(mainTeamPlugin, setting.getSvnLogFilterParam());
+		List<String> patchFileList = SvnPatchUtil.getPatchList(mainTeamPlugin, setting.getLogFilterParam());
 		if ((null == patchFileList || patchFileList.size() == 0) && !isUpdate) {
 			AlertUtil.showInfoAlert(Resource.NO_PATCH);
 		} else {

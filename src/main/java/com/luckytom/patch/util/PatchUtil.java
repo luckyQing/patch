@@ -11,8 +11,9 @@ import org.apache.maven.model.Model;
 import com.luckytom.patch.constants.Constants;
 import com.luckytom.patch.model.PatchProjectDTO;
 import com.luckytom.patch.model.PatchProjectInfoDTO;
-import com.luckytom.patch.model.SVNLogFilterParam;
+import com.luckytom.patch.model.LogFilterParam;
 import com.luckytom.patch.model.TeamPluginDO;
+import com.luckytom.patch.teamPlugin.util.SvnPatchUtil;
 
 /**
  * 应用工具类
@@ -29,11 +30,11 @@ public final class PatchUtil {
 	 * @param svnLogFilterParam
 	 * @return
 	 */
-	public static boolean dealDependencyProjectList(List<PatchProjectInfoDTO> dependencyProjectList, SVNLogFilterParam svnLogFilterParam) {
+	public static boolean dealDependencyProjectList(List<PatchProjectInfoDTO> dependencyProjectList, LogFilterParam logFilterParam) {
 		boolean isUpdate = false;
 		if(null!=dependencyProjectList) {
 			for (PatchProjectInfoDTO dependencyProject : dependencyProjectList) {
-				List<String> dependencyProjectFileList = SvnPatchUtil.getPatchList(dependencyProject.getTeamPlugin(), svnLogFilterParam);
+				List<String> dependencyProjectFileList = SvnPatchUtil.getPatchList(dependencyProject.getTeamPlugin(), logFilterParam);
 				if (null != dependencyProjectFileList && dependencyProjectFileList.size() > 0) {
 					isUpdate = true;
 					dependencyProject.setUpdate(isUpdate);
