@@ -18,15 +18,10 @@ import org.apache.logging.log4j.Logger;
 public final class CmdUtil {
 	
 	private static final Logger logger = LogManager.getFormatterLogger();
-	public static String systemEncoding;
-
-	static {
-		systemEncoding = System.getProperty("sun.jnu.encoding", "GBK");
-	}
+	public static final String SYSTEM_ENCODING = System.getProperty("sun.jnu.encoding", "GBK");
 
 	public static void exeCmd(String cmd) {
 		logger.info("exec==>" + cmd);
-
 		Process process = null;
 		try {
 			process = Runtime.getRuntime().exec(cmd);
@@ -53,8 +48,8 @@ public final class CmdUtil {
 	}
 
 	private static void showConsoleMsg(InputStream inputStream) {
-		try (InputStream in = inputStream; // 为了自动关闭InputStream
-				Reader reader = new InputStreamReader(in, systemEncoding);
+		try (InputStream in = inputStream;
+				Reader reader = new InputStreamReader(in, SYSTEM_ENCODING);
 				BufferedReader bufferedReader = new BufferedReader(reader);) {
 			String result = "";
 			while ((result = bufferedReader.readLine()) != null) {

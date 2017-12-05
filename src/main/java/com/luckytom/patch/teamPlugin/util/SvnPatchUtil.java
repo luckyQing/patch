@@ -159,7 +159,7 @@ public final class SvnPatchUtil {
 				continue;
 			}
 			String subLog = String.format(Resource.SVN_LOG_DETAIL, svnLogEntry.getRevision(), svnLogEntry.getAuthor(),
-					DateUtil.SDF_YYYYMMDDHHMMSS.get().format(svnLogEntry.getDate()), svnLogEntry.getMessage());
+					DateUtil.convertDateToStr(svnLogEntry.getDate()), svnLogEntry.getMessage());
 			logger.info(subLog);
 
 			Map<String, SVNLogEntryPath> changedPathsMap = svnLogEntry.getChangedPaths();

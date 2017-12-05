@@ -53,10 +53,6 @@ public final class PatchUtil {
 			FileUtil.deleteDir(patchDir);
 			// 1、main project
 			// 1.1 main/java
-			System.err.println("packagingName="+packagingName);
-			System.err.println("compileMainProjectPath="+compileMainProjectPath);
-			System.err.println("patchDir="+patchDir);
-			
 			dealJavaFiles(packagingName, compileMainProjectPath, patchDir, updateFileList);
 			// 1.2 main/recource
 			dealResource(packagingName, compileMainProjectPath, patchDir, updateFileList);
@@ -198,7 +194,6 @@ public final class PatchUtil {
 					    .append(name);
 				
 				FileUtil.copyFile(srcPath.toString(), destPath.toString());
-				break;
 			}
 		}
 	}
@@ -221,7 +216,6 @@ public final class PatchUtil {
 				String srcPath = FileUtil.getSrcClassesPath(projectPath, null, packagingFilePath);
 				String destPath = FileUtil.getSrcClassesPath(patchDir, packagingName, packagingFilePath);
 				FileUtil.copyFile(srcPath, destPath);
-				break;
 			}
 		}
 	}
@@ -236,13 +230,11 @@ public final class PatchUtil {
 	 */
 	private static void dealJavaFiles(String packagingName, String projectPath, String patchDir, List<String> updateFileList) {
 		String key = packagingName+File.separator+Constants.ProjectInfo.SRC_MAIN_JAVA;
-		System.err.println("key="+key);
 		Iterator<String> updateFileIterable = updateFileList.iterator();
 		while (updateFileIterable.hasNext()) {
 			String svnUrl = updateFileIterable.next();
 			if (svnUrl.contains(key)) {
 				String packagingFilePath = svnUrl.substring(svnUrl.indexOf(key)+key.length(), svnUrl.length());
-				System.err.println("packagingFilePath="+packagingFilePath);
 				String srcPath = StringUtils.EMPTY;
 				if(packagingFilePath.endsWith(Constants.ProjectInfo.DOT_JAVA)) {
 					packagingFilePath = packagingFilePath.replace(Constants.ProjectInfo.DOT_JAVA, Constants.ProjectInfo.DOT_CLASS);
@@ -254,7 +246,6 @@ public final class PatchUtil {
 				
 				String destPath = FileUtil.getSrcClassesPath(patchDir, packagingName, packagingFilePath);
 				FileUtil.copyFile(srcPath, destPath);
-				break;
 			}
 		}
 	}
@@ -264,15 +255,9 @@ public final class PatchUtil {
 		String srcFileName = srcFile.getName().replace(Constants.ProjectInfo.DOT_CLASS, "");
 		String innerClassRegex = srcFileName + "\\$[_A-Za-z][_A-Za-z0-9]{0,}"+Constants.ProjectInfo.DOT_CLASS;
 		
-		System.err.println("srcPath="+srcPath);
-		System.err.println("srcFileName="+srcFileName);
-		System.err.println("innerClassRegex="+innerClassRegex);
-		System.err.println("srcFile.getParent()="+srcFile.getParent());
-		
 		File[] srcDirFileList = new File(srcFile.getParent()).listFiles();
 		for(File srcDirFile:srcDirFileList){
 			if(srcDirFile.getName().matches(innerClassRegex)){
-				System.err.println(srcDirFile.getName()+"===>innerClassRegex="+innerClassRegex);
 				String innerClassPath = srcDirFile.getPath();
 				String key = Constants.ProjectInfo.WEB_INFO_CLASSES;
 				String packagingFilePath = innerClassPath.substring(innerClassPath.indexOf(key)+key.length());

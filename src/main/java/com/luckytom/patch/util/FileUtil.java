@@ -28,7 +28,7 @@ public final class FileUtil {
 		return path.endsWith("/") || path.endsWith("\\");
 	}
 	
-	private static void replaceSeparator(List<String> pathList, String separator) {
+	private static void replaceAllSeparator(List<String> pathList, String separator) {
 		if(null!=pathList&&pathList.size()>0) {
 			String v = Matcher.quoteReplacement(File.separator);
 			for(int i=0; i<pathList.size(); i++) {
@@ -40,20 +40,20 @@ public final class FileUtil {
 	}
 
 	public static void dealSeparator(List<String> pathList) {
-		if(null!=pathList&&pathList.size()>0) {
-			if(File.separator.equals("/")) {
-				replaceSeparator(pathList, "\\");
-			} else {
-				replaceSeparator(pathList, "/");
+		if (null != pathList && pathList.size() > 0) {
+			if (File.separator.equals("/")) {
+				replaceAllSeparator(pathList, "\\");
+			} else if (File.separator.equals("\\")) {
+				replaceAllSeparator(pathList, "/");
 			}
 		}
 	}
 	
 	/**
-	 * 获取一个临时文件夹
+	 * 生成一个临时文件夹
 	 * @return
 	 */
-	public static String getTmpDirUrl() {
+	public static String generateTempDirUrl() {
 		String tmpDirUrl = System.getProperty("java.io.tmpdir");
 		if (tmpDirUrl.endsWith(File.separator)) {
 			tmpDirUrl = tmpDirUrl + UUID.randomUUID().toString();
@@ -86,7 +86,7 @@ public final class FileUtil {
 	}
 
 	/**
-	 * 获取编译后的文件路径
+	 * 获取编译后的jar文件路径
 	 * 
 	 * @param projectPath
 	 * @param compileJarName

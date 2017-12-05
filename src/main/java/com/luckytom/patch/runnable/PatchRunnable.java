@@ -45,10 +45,10 @@ public class PatchRunnable implements Runnable {
 			FileUtil.dealSeparator(patchFileList);
 			
 			// compile project
-			String warPath = MavenUtil.getCompiledProject(patchProject);
+			String warPath = MavenUtil.compileProject(patchProject);
 			
 			// unwar
-			String tmpUnWarDirUrl = FileUtil.getTmpDirUrl();
+			String tmpUnWarDirUrl = FileUtil.generateTempDirUrl();
 			FileUtil.unWar(warPath, tmpUnWarDirUrl, patchProject.getMainProject().getPackageDTO().getPackagingName());
 			
 			// generate patch

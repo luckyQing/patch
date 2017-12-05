@@ -2,6 +2,7 @@ package com.luckytom.patch.util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 日期工具类
@@ -18,4 +19,7 @@ public final class DateUtil {
 		}
 	};
 	
+	public static String convertDateToStr(Date date){
+		return SDF_YYYYMMDDHHMMSS.get().format(date);
+	}
 }

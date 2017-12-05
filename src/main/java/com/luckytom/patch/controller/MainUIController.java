@@ -6,14 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.luckytom.patch.model.LogFilterParam;
 import com.luckytom.patch.model.PatchProjectDTO;
 import com.luckytom.patch.model.PatchProjectInfoDTO;
-import com.luckytom.patch.model.LogFilterParam;
 import com.luckytom.patch.model.SettingDO;
 import com.luckytom.patch.model.TeamPluginDO;
 import com.luckytom.patch.model.TeamPluginType;
 import com.luckytom.patch.service.PatchService;
-import com.luckytom.patch.util.AlertUtil;
 import com.luckytom.patch.util.ConsoleUtil;
 
 import javafx.collections.FXCollections;
@@ -138,7 +137,7 @@ public class MainUIController implements Initializable {
 	}
 
 	public void onAbout() {
-		AlertUtil.test();
+		
 	}
 
 	public void onSelectLocalProjectPath() {

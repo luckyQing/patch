@@ -1,7 +1,6 @@
 package com.luckytom.patch.util;
 
 import javafx.scene.control.Alert;
-import javafx.scene.control.DialogPane;
 
 /**
  * 弹框工具类
@@ -18,11 +17,6 @@ public final class AlertUtil {
 		alert.show();
 	}
 	
-	public static void test() {
-		DialogPane dialogPane = new DialogPane();
-		dialogPane.setVisible(true);
-	}
-
 	public static void showWarnAlert(String message) {
 		Alert alert = new Alert(Alert.AlertType.WARNING);
 		alert.setContentText(message);

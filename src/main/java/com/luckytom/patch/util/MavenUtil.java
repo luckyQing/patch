@@ -81,7 +81,7 @@ public final class MavenUtil {
 		}
 	}
 
-	public static String getCompiledProject(PatchProjectDTO patchProject) {
+	public static String compileProject(PatchProjectDTO patchProject) {
 		logger.info(Resource.COMPILE_CHECK_POM);
 		PatchProjectInfoDTO mainProject = patchProject.getMainProject();
 		List<PatchProjectInfoDTO> dependencyProjectList = patchProject.getDependencyProjectList();
