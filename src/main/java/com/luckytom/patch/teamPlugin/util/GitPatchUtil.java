@@ -17,8 +17,6 @@ public class GitPatchUtil {
 	/**
 	 * 从git获取补丁文件列表
 	 * 
-	 * @param teamPlugin
-	 * @param svnLogFilterParam
 	 * @return
 	 */
 	public static List<String> getPatchList() {
