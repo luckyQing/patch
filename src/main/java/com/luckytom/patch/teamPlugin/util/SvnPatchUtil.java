@@ -126,7 +126,7 @@ public final class SvnPatchUtil {
 			}
 		}
 	}
-
+	
 	private static List<SVNLogEntry> getSVNLogEntryList(SvnOperationFactory svnOperationFactory, SvnRevisionRange range,
 			SvnTarget target, Long limit) {
 		List<SVNLogEntry> svnLogEntryList = new ArrayList<SVNLogEntry>();
@@ -144,7 +144,17 @@ public final class SvnPatchUtil {
 		}
 		return svnLogEntryList;
 	}
-
+	
+	/**
+	 * 判断是否需要打进补丁包
+	 * @param type
+	 * @return
+	 */
+	private static boolean isNeedPatchFile(char type) {
+		return (SVNLogEntryPath.TYPE_ADDED == type) || (SVNLogEntryPath.TYPE_MODIFIED == type)
+				|| (SVNLogEntryPath.TYPE_REPLACED == type);
+	}
+	
 	/**
 	 * 获取提交的文件列表
 	 * 
@@ -165,12 +175,14 @@ public final class SvnPatchUtil {
 			Map<String, SVNLogEntryPath> changedPathsMap = svnLogEntry.getChangedPaths();
 			if (changedPathsMap.size() > 0) {
 				for (Map.Entry<String, SVNLogEntryPath> entry : changedPathsMap.entrySet()) {
-					String logDetail = String.format(Resource.SNV_OPERATION_LOG,
-							fileChangeTypeMap.get(entry.getValue().getType()), entry.getKey());
+					char type = entry.getValue().getType();
+					String logDetail = String.format(Resource.SNV_OPERATION_LOG, fileChangeTypeMap.get(type), entry.getKey());
 					logger.info(logDetail);
+					
+					if(isNeedPatchFile(type)){
+						fileList.add(entry.getKey());
+					}
 				}
-
-				fileList.addAll(changedPathsMap.keySet());
 			}
 		}
 
